@@ -135,18 +135,22 @@ function calculateLeveling() {
             break;
     }
 
-    const estimatedHours = Math.ceil(effectiveXPNeeded / baseXPPerHour);
-    const estimatedDays = Math.floor(estimatedHours / 24);
-    const remainingHours = estimatedHours % 24;
+    const estimatedTotalMinutes = Math.ceil(effectiveXPNeeded / baseXPPerHour * 60);
+    const estimatedDays = Math.floor(estimatedTotalMinutes / (24 * 60));
+    const remainingMinutes = estimatedTotalMinutes % (24 * 60);
+    const estimatedHours = Math.floor(remainingMinutes / 60);
+    const finalMinutes = remainingMinutes % 60;
 
     // Update results
     document.getElementById('totalXP').textContent = effectiveXPNeeded.toLocaleString();
     
     let timeString = '';
     if (estimatedDays > 0) {
-        timeString = `${estimatedDays} days, ${remainingHours} hours`;
+        timeString = `${estimatedDays} days, ${estimatedHours} hours, ${finalMinutes} minutes`;
+    } else if (estimatedHours > 0) {
+        timeString = `${estimatedHours} hours, ${finalMinutes} minutes`;
     } else {
-        timeString = `${estimatedHours} hours`;
+        timeString = `${finalMinutes} minutes`;
     }
     document.getElementById('estimatedTime').textContent = timeString;
     
