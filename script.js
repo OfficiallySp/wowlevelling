@@ -1,16 +1,16 @@
 // WoW Classic Leveling Calculator JavaScript
 
-// XP requirements for each level (1-90) with MoP prepatch reductions applied
+// XP requirements for each level (1-90) - Calibrated with actual in-game data
 const xpTable = {
     1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 6500,
-    11: 7600, 12: 8700, 13: 10000, 14: 11400, 15: 12900, 16: 14400, 17: 16000, 18: 17700, 19: 19400, 20: 21300,
-    21: 23200, 22: 25200, 23: 27300, 24: 29400, 25: 31700, 26: 34000, 27: 36500, 28: 39100, 29: 41800, 30: 44600,
-    31: 47600, 32: 50800, 33: 54100, 34: 57500, 35: 61000, 36: 64600, 37: 68300, 38: 72100, 39: 76000, 40: 80000,
-    41: 84100, 42: 88300, 43: 92600, 44: 97000, 45: 101500, 46: 106100, 47: 110800, 48: 115600, 49: 120500, 50: 125500,
-    51: 130700, 52: 136000, 53: 141400, 54: 146900, 55: 152500, 56: 158200, 57: 164000, 58: 169900, 59: 175900, 60: 290000,
-    61: 317000, 62: 349000, 63: 292400, 64: 428000, 65: 475000, 66: 527000, 67: 585000, 68: 648000, 69: 717000, 70: 813000,
-    71: 821000, 72: 830000, 73: 838000, 74: 847000, 75: 855000, 76: 865000, 77: 873000, 78: 882000, 79: 891000, 80: 1686300,
-    81: 2121500, 82: 1788000, 83: 2324000, 84: 2291500, 85: 3250000, 86: 4050000, 87: 5100000, 88: 6400000, 89: 7750000, 90: 0
+    11: 6960, 12: 7840, 13: 8800, 14: 9840, 15: 10800, 16: 12000, 17: 13120, 18: 14240, 19: 15400, 20: 16640,
+    21: 17920, 22: 19200, 23: 20400, 24: 21760, 25: 23120, 26: 24400, 27: 25760, 28: 27120, 29: 29040, 30: 31040,
+    31: 33280, 32: 35680, 33: 38400, 34: 41120, 35: 44000, 36: 46960, 37: 49920, 38: 52960, 39: 56160, 40: 74300,
+    41: 78500, 42: 82800, 43: 87100, 44: 91600, 45: 96300, 46: 101000, 47: 105800, 48: 110700, 49: 115700, 50: 120900,
+    51: 126100, 52: 131500, 53: 137000, 54: 142500, 55: 148200, 56: 154000, 57: 159900, 58: 165800, 59: 172000, 60: 290000,
+    61: 317000, 62: 349000, 63: 292400, 64: 300400, 65: 475000, 66: 527000, 67: 585000, 68: 648000, 69: 717000, 70: 812700,
+    71: 821000, 72: 830000, 73: 838000, 74: 847000, 75: 855300, 76: 865000, 77: 873000, 78: 882000, 79: 891000, 80: 1686300,
+    81: 2121500, 82: 2642640, 83: 3434200, 84: 4582500, 85: 13000000, 86: 15080000, 87: 18980000, 88: 22880000, 89: 27560000, 90: 0
 };
 
 // Zone recommendations by level ranges
@@ -118,20 +118,20 @@ function calculateLeveling() {
     // Apply XP bonus
     const effectiveXPNeeded = Math.floor(totalXPNeeded * (100 / (100 + xpBonus)));
 
-    // Calculate XP per hour based on play style (MoP prepatch rates)
-    let baseXPPerHour = 100000; // Base XP per hour (prepatch enhanced)
+    // Calculate XP per hour based on play style (MoP prepatch rates - updated with real data)
+    let baseXPPerHour = 120000; // Base XP per hour (prepatch enhanced)
     switch (playStyle) {
         case 'questing':
-            baseXPPerHour = currentLevel < 15 ? 50000 : currentLevel < 60 ? 120000 : currentLevel < 80 ? 180000 : 250000;
+            baseXPPerHour = currentLevel < 15 ? 60000 : currentLevel < 60 ? 150000 : currentLevel < 80 ? 240000 : 300000;
             break;
         case 'dungeon':
-            baseXPPerHour = currentLevel < 15 ? 60000 : currentLevel < 60 ? 150000 : currentLevel < 80 ? 220000 : 300000;
+            baseXPPerHour = currentLevel < 15 ? 70000 : currentLevel < 60 ? 180000 : currentLevel < 80 ? 280000 : 350000;
             break;
         case 'mixed':
-            baseXPPerHour = currentLevel < 15 ? 55000 : currentLevel < 60 ? 135000 : currentLevel < 80 ? 200000 : 275000;
+            baseXPPerHour = currentLevel < 15 ? 65000 : currentLevel < 60 ? 165000 : currentLevel < 80 ? 260000 : 325000;
             break;
         case 'pvp':
-            baseXPPerHour = currentLevel < 15 ? 40000 : currentLevel < 60 ? 100000 : currentLevel < 80 ? 150000 : 200000;
+            baseXPPerHour = currentLevel < 15 ? 50000 : currentLevel < 60 ? 120000 : currentLevel < 80 ? 200000 : 250000;
             break;
     }
 
