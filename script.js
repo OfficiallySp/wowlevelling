@@ -118,8 +118,8 @@ function calculateLeveling() {
     // Apply XP bonus
     const effectiveXPNeeded = Math.floor(totalXPNeeded * (100 / (100 + xpBonus)));
 
-    // Calculate XP per hour based on play style (MoP prepatch rates - updated with real data)
-    let baseXPPerHour = 120000; // Base XP per hour (prepatch enhanced)
+
+    let baseXPPerHour = 150000;
     switch (playStyle) {
         case 'questing':
             baseXPPerHour = currentLevel < 15 ? 60000 : currentLevel < 60 ? 150000 : currentLevel < 80 ? 240000 : 300000;
