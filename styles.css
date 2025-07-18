@@ -89,7 +89,7 @@ body {
 
 .level-inputs {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -286,6 +286,46 @@ body {
     border-radius: 4px;
     font-size: 0.8em;
     margin-top: 5px;
+}
+
+.zone-faction {
+    font-size: 0.85em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 3px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.zone-faction.alliance {
+    background: #0078d4;
+    color: #ffffff;
+}
+
+.zone-faction.horde {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+.zone-faction.both {
+    background: #6c757d;
+    color: #ffffff;
+}
+
+.progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    transition: width 0.3s ease;
+    border-radius: 10px;
 }
 
 @media (max-width: 768px) {

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoW Classic Leveling Calculator - Cataclysm/MOP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffd700;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .results-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffb347);
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .result-label {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            color: #ffffff;
+            font-size: 1.1em;
+        }
+
+        .zone-recommendations {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .zone-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .zone-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .zone-item:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .zone-name {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .zone-level {
+            color: #cccccc;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ffb347);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WoW Classic Leveling Calculator</h1>
+        <p style="text-align: center; color: #cccccc; margin-bottom: 30px;">Cataclysm & Mists of Pandaria (Levels 1-90)</p>
+        
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Character Information</h3>
+                
+                <div class="input-group">
+                    <label for="currentLevel">Current Level:</label>
+                    <input type="number" id="currentLevel" min="1" max="89" value="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="targetLevel">Target Level:</label>
+                    <input type="number" id="targetLevel" min="2" max="90" value="90">
+                </div>
+                
+                <div class="input-group">
+                    <label for="currentXP">Current XP in Level:</label>
+                    <input type="number" id="currentXP" min="0" value="0">
+                </div>
+                
+                <div class="input-group">
+                    <label for="xpBonus">XP Bonus (%):</label>
+                    <select id="xpBonus">
+                        <option value="0">No Bonus</option>
+                        <option value="10">Rested XP (+10%)</option>
+                        <option value="20">Heirloom Gear (+20%)</option>
+                        <option value="30">Rested + Heirloom (+30%)</option>
+                        <option value="50">Guild Bonus (+50%)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="playStyle">Play Style:</label>
+                    <select id="playStyle">
+                        <option value="questing">Questing</option>
+                        <option value="dungeon">Dungeon Grinding</option>
+                        <option value="mixed">Mixed (Questing + Dungeons)</option>
+                        <option value="pvp">PvP</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="calculateLeveling()">Calculate Leveling</button>
+            </div>
+            
+            <div class="results-section">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Leveling Statistics</h3>
+                
+                <div class="result-item">
+                    <div class="result-label">Total XP Needed:</div>
+                    <div class="result-value" id="totalXP">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Estimated Time:</div>
+                    <div class="result-value" id="estimatedTime">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">XP per Hour Needed:</div>
+                    <div class="result-value" id="xpPerHour">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Current Level Progress:</div>
+                    <div class="result-value" id="levelProgress">-</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Levels Remaining:</div>
+                    <div class="result-value" id="levelsRemaining">-</div>
+                </div>
+            </div>
+            
+            <div class="zone-recommendations">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Recommended Zones</h3>
+                <div class="zone-list" id="zoneList">
+                    <!-- Zone recommendations will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // XP requirements for each level (1-90) based on Cataclysm/MOP
+        const xpTable = {
+            1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 6500,
+            11: 7600, 12: 8800, 13: 10100, 14: 11400, 15: 12900, 16: 14400, 17: 16000, 18: 17700, 19: 19400, 20: 21300,
+            21: 23200, 22: 25200, 23: 27300, 24: 29400, 25: 31700, 26: 34000, 27: 36500, 28: 39100, 29: 41800, 30: 44600,
+            31: 47600, 32: 50800, 33: 54100, 34: 57500, 35: 61000, 36: 64600, 37: 68300, 38: 72100, 39: 76000, 40: 80000,
+            41: 84100, 42: 88300, 43: 92600, 44: 97000, 45: 101500, 46: 106100, 47: 110800, 48: 115600, 49: 120500, 50: 125500,
+            51: 130700, 52: 136000, 53: 141400, 54: 146900, 55: 152500, 56: 158200, 57: 164000, 58: 169900, 59: 175900, 60: 182000,
+            61: 188200, 62: 194500, 63: 200900, 64: 207400, 65: 214000, 66: 220700, 67: 227500, 68: 234400, 69: 241400, 70: 248500,
+            71: 255700, 72: 263000, 73: 270400, 74: 277900, 75: 285500, 76: 293200, 77: 301000, 78: 308900, 79: 316900, 80: 325000,
+            81: 333200, 82: 341500, 83: 349900, 84: 358400, 85: 367000, 86: 375700, 87: 384500, 88: 393400, 89: 402400, 90: 411500
+        };
+
+        // Zone recommendations by level ranges
+        const zoneRecommendations = {
+            "1-10": [
+                { name: "Elwynn Forest", level: "1-10", faction: "Alliance" },
+                { name: "Dun Morogh", level: "1-10", faction: "Alliance" },
+                { name: "Teldrassil", level: "1-10", faction: "Alliance" },
+                { name: "Durotar", level: "1-10", faction: "Horde" },
+                { name: "Mulgore", level: "1-10", faction: "Horde" },
+                { name: "Tirisfal Glades", level: "1-10", faction: "Horde" }
+            ],
+            "10-20": [
+                { name: "Westfall", level: "10-20", faction: "Alliance" },
+                { name: "Loch Modan", level: "10-20", faction: "Alliance" },
+                { name: "Darkshore", level: "10-20", faction: "Alliance" },
+                { name: "The Barrens", level: "10-20", faction: "Horde" },
+                { name: "Silverpine Forest", level: "10-20", faction: "Horde" },
+                { name: "Ghostlands", level: "10-20", faction: "Horde" }
+            ],
+            "20-30": [
+                { name: "Redridge Mountains", level: "20-30", faction: "Alliance" },
+                { name: "Wetlands", level: "20-30", faction: "Alliance" },
+                { name: "Ashenvale", level: "20-30", faction: "Alliance" },
+                { name: "Stonetalon Mountains", level: "20-30", faction: "Both" },
+                { name: "Thousand Needles", level: "20-30", faction: "Both" },
+                { name: "Hillsbrad Foothills", level: "20-30", faction: "Horde" }
+            ],
+            "30-40": [
+                { name: "Stranglethorn Vale", level: "30-40", faction: "Both" },
+                { name: "Desolace", level: "30-40", faction: "Both" },
+                { name: "Southern Barrens", level: "30-40", faction: "Both" },
+                { name: "Arathi Highlands", level: "30-40", faction: "Both" },
+                { name: "Badlands", level: "30-40", faction: "Both" }
+            ],
+            "40-50": [
+                { name: "Eastern Plaguelands", level: "40-50", faction: "Both" },
+                { name: "Western Plaguelands", level: "40-50", faction: "Both" },
+                { name: "Tanaris", level: "40-50", faction: "Both" },
+                { name: "Feralas", level: "40-50", faction: "Both" },
+                { name: "Azshara", level: "40-50", faction: "Both" }
+            ],
+            "50-60": [
+                { name: "Un'Goro Crater", level: "50-60", faction: "Both" },
+                { name: "Felwood", level: "50-60", faction: "Both" },
+                { name: "Winterspring", level: "50-60", faction: "Both" },
+                { name: "Burning Steppes", level: "50-60", faction: "Both" },
+                { name: "Swamp of Sorrows", level: "50-60", faction: "Both" }
+            ],
+            "60-70": [
+                { name: "Hellfire Peninsula", level: "60-70", faction: "Both" },
+                { name: "Zangarmarsh", level: "60-70", faction: "Both" },
+                { name: "Nagrand", level: "60-70", faction: "Both" },
+                { name: "Blade's Edge Mountains", level: "60-70", faction: "Both" },
+                { name: "Netherstorm", level: "60-70", faction: "Both" }
+            ],
+            "70-80": [
+                { name: "Borean Tundra", level: "70-80", faction: "Both" },
+                { name: "Dragonblight", level: "70-80", faction: "Both" },
+                { name: "Grizzly Hills", level: "70-80", faction: "Both" },
+                { name: "Zul'Drak", level: "70-80", faction: "Both" },
+                { name: "Icecrown", level: "70-80", faction: "Both" }
+            ],
+            "80-85": [
+                { name: "Mount Hyjal", level: "80-85", faction: "Both" },
+                { name: "Vashj'ir", level: "80-85", faction: "Both" },
+                { name: "Deepholm", level: "80-85", faction: "Both" },
+                { name: "Uldum", level: "80-85", faction: "Both" },
+                { name: "Twilight Highlands", level: "80-85", faction: "Both" }
+            ],
+            "85-90": [
+                { name: "The Jade Forest", level: "85-90", faction: "Both" },
+                { name: "Valley of the Four Winds", level: "85-90", faction: "Both" },
+                { name: "Krasarang Wilds", level: "85-90", faction: "Both" },
+                { name: "Kun-Lai Summit", level: "85-90", faction: "Both" },
+                { name: "Townlong Steppes", level: "85-90", faction: "Both" },
+                { name: "Dread Wastes", level: "85-90", faction: "Both" }
+            ]
+        };
+
+        function calculateLeveling() {
+            const currentLevel = parseInt(document.getElementById('currentLevel').value);
+            const targetLevel = parseInt(document.getElementById('targetLevel').value);
+            const currentXP = parseInt(document.getElementById('currentXP').value) || 0;
+            const xpBonus = parseInt(document.getElementById('xpBonus').value);
+            const playStyle = document.getElementById('playStyle').value;
+
+            if (currentLevel >= targetLevel) {
+                alert('Target level must be higher than current level!');
+                return;
+            }
+
+            // Calculate total XP needed
+            let totalXPNeeded = 0;
+            
+            // Add remaining XP for current level
+            const currentLevelXP = xpTable[currentLevel + 1] || 0;
+            totalXPNeeded += (currentLevelXP - currentXP);
+
+            // Add XP for all levels in between
+            for (let level = currentLevel + 1; level < targetLevel; level++) {
+                totalXPNeeded += xpTable[level + 1] || 0;
+            }
+
+            // Apply XP bonus
+            const effectiveXPNeeded = Math.floor(totalXPNeeded * (100 / (100 + xpBonus)));
+
+            // Calculate XP per hour based on play style
+            let baseXPPerHour = 50000; // Base XP per hour
+            switch (playStyle) {
+                case 'questing':
+                    baseXPPerHour = currentLevel < 15 ? 30000 : currentLevel < 60 ? 80000 : 120000;
+                    break;
+                case 'dungeon':
+                    baseXPPerHour = currentLevel < 15 ? 40000 : currentLevel < 60 ? 100000 : 150000;
+                    break;
+                case 'mixed':
+                    baseXPPerHour = currentLevel < 15 ? 35000 : currentLevel < 60 ? 90000 : 135000;
+                    break;
+                case 'pvp':
+                    baseXPPerHour = currentLevel < 15 ? 20000 : currentLevel < 60 ? 60000 : 100000;
+                    break;
+            }
+
+            const estimatedHours = Math.ceil(effectiveXPNeeded / baseXPPerHour);
+            const estimatedDays = Math.floor(estimatedHours / 24);
+            const remainingHours = estimatedHours % 24;
+
+            // Update results
+            document.getElementById('totalXP').textContent = effectiveXPNeeded.toLocaleString();
+            
+            let timeString = '';
+            if (estimatedDays > 0) {
+                timeString = `${estimatedDays} days, ${remainingHours} hours`;
+            } else {
+                timeString = `${estimatedHours} hours`;
+            }
+            document.getElementById('estimatedTime').textContent = timeString;
+            
+            document.getElementById('xpPerHour').textContent = baseXPPerHour.toLocaleString();
+            document.getElementById('levelsRemaining').textContent = targetLevel - currentLevel;
+
+            // Current level progress
+            const currentLevelTotalXP = xpTable[currentLevel + 1] || 0;
+            const progressPercent = currentLevelTotalXP > 0 ? (currentXP / currentLevelTotalXP) * 100 : 0;
+            document.getElementById('levelProgress').textContent = `${currentXP.toLocaleString()} / ${currentLevelTotalXP.toLocaleString()} (${progressPercent.toFixed(1)}%)`;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+
+            // Update zone recommendations
+            updateZoneRecommendations(currentLevel, targetLevel);
+        }
+
+        function updateZoneRecommendations(currentLevel, targetLevel) {
+            const zoneList = document.getElementById('zoneList');
+            zoneList.innerHTML = '';
+
+            // Determine which level ranges to show
+            const levelRanges = Object.keys(zoneRecommendations);
+            const relevantRanges = levelRanges.filter(range => {
+                const [min, max] = range.split('-').map(Number);
+                return currentLevel <= max && targetLevel >= min;
+            });
+
+            relevantRanges.forEach(range => {
+                const zones = zoneRecommendations[range];
+                zones.forEach(zone => {
+                    const zoneElement = document.createElement('div');
+                    zoneElement.className = 'zone-item';
+                    zoneElement.innerHTML = `
+                        <div class="zone-name">${zone.name}</div>
+                        <div class="zone-level">Level ${zone.level} - ${zone.faction}</div>
+                    `;
+                    zoneList.appendChild(zoneElement);
+                });
+            });
+        }
+
+        // Initialize calculator on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateLeveling();
+        });
+
+        // Auto-calculate when inputs change
+        document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
+        document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
+        document.getElementById('currentXP').addEventListener('input', calculateLeveling);
+        document.getElementById('xpBonus').addEventListener('change', calculateLeveling);
+        document.getElementById('playStyle').addEventListener('change', calculateLeveling);
+    </script>
+</body>
+</html>

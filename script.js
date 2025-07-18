@@ -1,10 +1,23 @@
 // WoW Classic Leveling Calculator JavaScript
 
+// Accurate XP requirements for each level (from Cataclysm/MOP)
+const accurateXPTable = {
+    1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 6500,
+    11: 7600, 12: 8800, 13: 10100, 14: 11400, 15: 12900, 16: 14400, 17: 16000, 18: 17700, 19: 19400, 20: 21300,
+    21: 23200, 22: 25200, 23: 27300, 24: 29400, 25: 31700, 26: 34000, 27: 36500, 28: 39100, 29: 41800, 30: 44600,
+    31: 47600, 32: 50800, 33: 54100, 34: 57500, 35: 61000, 36: 64600, 37: 68300, 38: 72100, 39: 76000, 40: 80000,
+    41: 84100, 42: 88300, 43: 92600, 44: 97000, 45: 101500, 46: 106100, 47: 110800, 48: 115600, 49: 120500, 50: 125500,
+    51: 130700, 52: 136000, 53: 141400, 54: 146900, 55: 152500, 56: 158200, 57: 164000, 58: 169900, 59: 175900, 60: 182000,
+    61: 188200, 62: 194500, 63: 200900, 64: 207400, 65: 214000, 66: 220700, 67: 227500, 68: 234400, 69: 241400, 70: 248500,
+    71: 255700, 72: 263000, 73: 270400, 74: 277900, 75: 285500, 76: 293200, 77: 301000, 78: 308900, 79: 316900, 80: 325000,
+    81: 333200, 82: 341500, 83: 349900, 84: 358400, 85: 367000, 86: 375700, 87: 384500, 88: 393400, 89: 402400, 90: 411500
+};
+
 // Experience tables for each expansion
 const experienceData = {
     vanilla: {
         maxLevel: 60,
-        xpTable: generateXPTable(60, 'vanilla'),
+        xpTable: extractXPTableForExpansion(60),
         avgXPPerHour: {
             questing: 35000,
             dungeons: 45000,
@@ -14,7 +27,7 @@ const experienceData = {
     },
     tbc: {
         maxLevel: 70,
-        xpTable: generateXPTable(70, 'tbc'),
+        xpTable: extractXPTableForExpansion(70),
         avgXPPerHour: {
             questing: 45000,
             dungeons: 55000,
@@ -24,7 +37,7 @@ const experienceData = {
     },
     wotlk: {
         maxLevel: 80,
-        xpTable: generateXPTable(80, 'wotlk'),
+        xpTable: extractXPTableForExpansion(80),
         avgXPPerHour: {
             questing: 55000,
             dungeons: 65000,
@@ -34,7 +47,7 @@ const experienceData = {
     },
     cataclysm: {
         maxLevel: 85,
-        xpTable: generateXPTable(85, 'cataclysm'),
+        xpTable: extractXPTableForExpansion(85),
         avgXPPerHour: {
             questing: 65000,
             dungeons: 75000,
@@ -44,7 +57,7 @@ const experienceData = {
     },
     mop: {
         maxLevel: 90,
-        xpTable: generateXPTable(90, 'mop'),
+        xpTable: extractXPTableForExpansion(90),
         avgXPPerHour: {
             questing: 75000,
             dungeons: 85000,
@@ -54,105 +67,81 @@ const experienceData = {
     }
 };
 
-// Zone recommendations for each expansion
-const zoneRecommendations = {
-    vanilla: [
-        { name: "Elwynn Forest", level: "1-10", expansion: "Vanilla" },
-        { name: "Westfall", level: "10-20", expansion: "Vanilla" },
-        { name: "Redridge Mountains", level: "15-25", expansion: "Vanilla" },
-        { name: "Stranglethorn Vale", level: "30-45", expansion: "Vanilla" },
-        { name: "Tanaris", level: "40-50", expansion: "Vanilla" },
-        { name: "Un'Goro Crater", level: "48-55", expansion: "Vanilla" },
-        { name: "Felwood", level: "48-55", expansion: "Vanilla" },
-        { name: "Western Plaguelands", level: "51-58", expansion: "Vanilla" },
-        { name: "Eastern Plaguelands", level: "53-60", expansion: "Vanilla" }
-    ],
-    tbc: [
-        { name: "Hellfire Peninsula", level: "58-63", expansion: "TBC" },
-        { name: "Zangarmarsh", level: "60-64", expansion: "TBC" },
-        { name: "Nagrand", level: "64-67", expansion: "TBC" },
-        { name: "Blade's Edge Mountains", level: "65-68", expansion: "TBC" },
-        { name: "Netherstorm", level: "67-70", expansion: "TBC" },
-        { name: "Shadowmoon Valley", level: "67-70", expansion: "TBC" }
-    ],
-    wotlk: [
-        { name: "Borean Tundra", level: "68-72", expansion: "WotLK" },
-        { name: "Dragonblight", level: "71-74", expansion: "WotLK" },
-        { name: "Grizzly Hills", level: "73-75", expansion: "WotLK" },
-        { name: "Zul'Drak", level: "74-77", expansion: "WotLK" },
-        { name: "Sholazar Basin", level: "76-78", expansion: "WotLK" },
-        { name: "Icecrown", level: "77-80", expansion: "WotLK" },
-        { name: "The Storm Peaks", level: "77-80", expansion: "WotLK" }
-    ],
-    cataclysm: [
-        { name: "Mount Hyjal", level: "80-82", expansion: "Cataclysm" },
-        { name: "Vashj'ir", level: "80-82", expansion: "Cataclysm" },
-        { name: "Deepholm", level: "82-83", expansion: "Cataclysm" },
-        { name: "Uldum", level: "83-84", expansion: "Cataclysm" },
-        { name: "Twilight Highlands", level: "84-85", expansion: "Cataclysm" }
-    ],
-    mop: [
-        { name: "The Jade Forest", level: "85-86", expansion: "MoP" },
-        { name: "Valley of the Four Winds", level: "86-87", expansion: "MoP" },
-        { name: "Krasarang Wilds", level: "86-87", expansion: "MoP" },
-        { name: "Kun-Lai Summit", level: "87-88", expansion: "MoP" },
-        { name: "Townlong Steppes", level: "88-89", expansion: "MoP" },
-        { name: "Dread Wastes", level: "89-90", expansion: "MoP" }
-    ]
-};
-
-// Generate XP table for each expansion
-function generateXPTable(maxLevel, expansion) {
+// Extract XP table for specific expansion max level
+function extractXPTableForExpansion(maxLevel) {
     const table = {};
-    
-    for (let level = 1; level < maxLevel; level++) {
-        let xpRequired;
-        
-        if (expansion === 'vanilla') {
-            if (level <= 10) {
-                xpRequired = level * 100;
-            } else if (level <= 20) {
-                xpRequired = (level - 10) * 1000 + 1000;
-            } else if (level <= 30) {
-                xpRequired = (level - 20) * 2000 + 11000;
-            } else if (level <= 40) {
-                xpRequired = (level - 30) * 3000 + 31000;
-            } else if (level <= 50) {
-                xpRequired = (level - 40) * 4000 + 61000;
-            } else {
-                xpRequired = (level - 50) * 5000 + 101000;
-            }
-        } else if (expansion === 'tbc') {
-            if (level <= 60) {
-                xpRequired = generateXPTable(60, 'vanilla')[level] || 0;
-            } else {
-                xpRequired = (level - 60) * 200000 + 200000;
-            }
-        } else if (expansion === 'wotlk') {
-            if (level <= 70) {
-                xpRequired = generateXPTable(70, 'tbc')[level] || 0;
-            } else {
-                xpRequired = (level - 70) * 250000 + 250000;
-            }
-        } else if (expansion === 'cataclysm') {
-            if (level <= 80) {
-                xpRequired = generateXPTable(80, 'wotlk')[level] || 0;
-            } else {
-                xpRequired = (level - 80) * 300000 + 300000;
-            }
-        } else if (expansion === 'mop') {
-            if (level <= 85) {
-                xpRequired = generateXPTable(85, 'cataclysm')[level] || 0;
-            } else {
-                xpRequired = (level - 85) * 350000 + 350000;
-            }
-        }
-        
-        table[level] = Math.floor(xpRequired);
+    for (let level = 1; level <= maxLevel; level++) {
+        table[level] = accurateXPTable[level] || 0;
     }
-    
     return table;
 }
+
+// Enhanced zone recommendations with more accurate data
+const zoneRecommendations = {
+    vanilla: [
+        { name: "Elwynn Forest", level: "1-10", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Dun Morogh", level: "1-10", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Teldrassil", level: "1-10", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Durotar", level: "1-10", expansion: "Vanilla", faction: "Horde" },
+        { name: "Mulgore", level: "1-10", expansion: "Vanilla", faction: "Horde" },
+        { name: "Tirisfal Glades", level: "1-10", expansion: "Vanilla", faction: "Horde" },
+        { name: "Westfall", level: "10-20", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Loch Modan", level: "10-20", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Darkshore", level: "10-20", expansion: "Vanilla", faction: "Alliance" },
+        { name: "The Barrens", level: "10-20", expansion: "Vanilla", faction: "Horde" },
+        { name: "Silverpine Forest", level: "10-20", expansion: "Vanilla", faction: "Horde" },
+        { name: "Redridge Mountains", level: "20-30", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Wetlands", level: "20-30", expansion: "Vanilla", faction: "Alliance" },
+        { name: "Ashenvale", level: "20-30", expansion: "Vanilla", faction: "Both" },
+        { name: "Stonetalon Mountains", level: "20-30", expansion: "Vanilla", faction: "Both" },
+        { name: "Thousand Needles", level: "20-30", expansion: "Vanilla", faction: "Both" },
+        { name: "Stranglethorn Vale", level: "30-40", expansion: "Vanilla", faction: "Both" },
+        { name: "Desolace", level: "30-40", expansion: "Vanilla", faction: "Both" },
+        { name: "Arathi Highlands", level: "30-40", expansion: "Vanilla", faction: "Both" },
+        { name: "Badlands", level: "30-40", expansion: "Vanilla", faction: "Both" },
+        { name: "Tanaris", level: "40-50", expansion: "Vanilla", faction: "Both" },
+        { name: "Feralas", level: "40-50", expansion: "Vanilla", faction: "Both" },
+        { name: "Azshara", level: "40-50", expansion: "Vanilla", faction: "Both" },
+        { name: "Un'Goro Crater", level: "50-60", expansion: "Vanilla", faction: "Both" },
+        { name: "Felwood", level: "50-60", expansion: "Vanilla", faction: "Both" },
+        { name: "Winterspring", level: "50-60", expansion: "Vanilla", faction: "Both" },
+        { name: "Eastern Plaguelands", level: "50-60", expansion: "Vanilla", faction: "Both" },
+        { name: "Western Plaguelands", level: "50-60", expansion: "Vanilla", faction: "Both" }
+    ],
+    tbc: [
+        { name: "Hellfire Peninsula", level: "58-63", expansion: "TBC", faction: "Both" },
+        { name: "Zangarmarsh", level: "60-64", expansion: "TBC", faction: "Both" },
+        { name: "Nagrand", level: "64-67", expansion: "TBC", faction: "Both" },
+        { name: "Blade's Edge Mountains", level: "65-68", expansion: "TBC", faction: "Both" },
+        { name: "Netherstorm", level: "67-70", expansion: "TBC", faction: "Both" },
+        { name: "Shadowmoon Valley", level: "67-70", expansion: "TBC", faction: "Both" }
+    ],
+    wotlk: [
+        { name: "Borean Tundra", level: "68-72", expansion: "WotLK", faction: "Both" },
+        { name: "Howling Fjord", level: "68-72", expansion: "WotLK", faction: "Both" },
+        { name: "Dragonblight", level: "71-74", expansion: "WotLK", faction: "Both" },
+        { name: "Grizzly Hills", level: "73-75", expansion: "WotLK", faction: "Both" },
+        { name: "Zul'Drak", level: "74-77", expansion: "WotLK", faction: "Both" },
+        { name: "Sholazar Basin", level: "76-78", expansion: "WotLK", faction: "Both" },
+        { name: "Icecrown", level: "77-80", expansion: "WotLK", faction: "Both" },
+        { name: "The Storm Peaks", level: "77-80", expansion: "WotLK", faction: "Both" }
+    ],
+    cataclysm: [
+        { name: "Mount Hyjal", level: "80-82", expansion: "Cataclysm", faction: "Both" },
+        { name: "Vashj'ir", level: "80-82", expansion: "Cataclysm", faction: "Both" },
+        { name: "Deepholm", level: "82-83", expansion: "Cataclysm", faction: "Both" },
+        { name: "Uldum", level: "83-84", expansion: "Cataclysm", faction: "Both" },
+        { name: "Twilight Highlands", level: "84-85", expansion: "Cataclysm", faction: "Both" }
+    ],
+    mop: [
+        { name: "The Jade Forest", level: "85-86", expansion: "MoP", faction: "Both" },
+        { name: "Valley of the Four Winds", level: "86-87", expansion: "MoP", faction: "Both" },
+        { name: "Krasarang Wilds", level: "86-87", expansion: "MoP", faction: "Both" },
+        { name: "Kun-Lai Summit", level: "87-88", expansion: "MoP", faction: "Both" },
+        { name: "Townlong Steppes", level: "88-89", expansion: "MoP", faction: "Both" },
+        { name: "Dread Wastes", level: "89-90", expansion: "MoP", faction: "Both" }
+    ]
+};
 
 // DOM elements
 const expansionSelect = document.getElementById('expansion');
@@ -209,6 +198,7 @@ function calculateLevelingTime() {
     const expansion = expansionSelect.value;
     const currentLevel = parseInt(currentLevelInput.value);
     const targetLevel = parseInt(targetLevelInput.value);
+    const currentXP = parseInt(document.getElementById('currentXP')?.value || 0);
     
     if (currentLevel >= targetLevel) {
         resultsDiv.innerHTML = '<p style="color: #ff6b6b;">Current level must be lower than target level!</p>';
@@ -217,12 +207,20 @@ function calculateLevelingTime() {
     
     const expansionData = experienceData[expansion];
     const xpTable = expansionData.xpTable;
-    const baseXPPerHour = expansionData.avgXPPerHour[selectedMethod];
+    
+    // Calculate dynamic XP per hour based on level and play style
+    let baseXPPerHour = calculateDynamicXPPerHour(currentLevel, selectedMethod);
     
     // Calculate total XP needed
     let totalXPNeeded = 0;
-    for (let level = currentLevel; level < targetLevel; level++) {
-        totalXPNeeded += xpTable[level] || 0;
+    
+    // Add remaining XP for current level
+    const currentLevelXP = xpTable[currentLevel + 1] || 0;
+    totalXPNeeded += Math.max(0, currentLevelXP - currentXP);
+    
+    // Add XP for all levels in between
+    for (let level = currentLevel + 1; level < targetLevel; level++) {
+        totalXPNeeded += xpTable[level + 1] || 0;
     }
     
     // Calculate XP modifiers
@@ -230,13 +228,13 @@ function calculateLevelingTime() {
     const activeModifiers = [];
     
     if (restXPCheckbox.checked) {
-        xpModifier *= 1.5; // Rested XP averages to 50% bonus over leveling period
-        activeModifiers.push('Rested XP (+50% average)');
+        xpModifier *= 1.1; // Rested XP (+10% average)
+        activeModifiers.push('Rested XP (+10%)');
     }
     
     if (heirloomXPCheckbox.checked) {
-        xpModifier *= 1.45;
-        activeModifiers.push('Heirloom Bonus (+45%)');
+        xpModifier *= 1.2; // Heirloom gear (+20%)
+        activeModifiers.push('Heirloom Bonus (+20%)');
     }
     
     if (recruitAFriendCheckbox.checked) {
@@ -244,12 +242,11 @@ function calculateLevelingTime() {
         activeModifiers.push('Recruit-a-Friend (+300%)');
     }
     
-    // Calculate effective XP per hour
-    const effectiveXPPerHour = baseXPPerHour * xpModifier;
+    // Apply XP bonus (reduce needed XP)
+    const effectiveXPNeeded = Math.floor(totalXPNeeded / xpModifier);
     
     // Calculate time needed
-    const hoursNeeded = totalXPNeeded / effectiveXPPerHour;
-    const daysNeeded = hoursNeeded / 24;
+    const hoursNeeded = effectiveXPNeeded / baseXPPerHour;
     
     // Format time
     const formatTime = (hours) => {
@@ -265,23 +262,34 @@ function calculateLevelingTime() {
         return result || '0m';
     };
     
+    // Current level progress
+    const currentLevelTotalXP = xpTable[currentLevel + 1] || 0;
+    const progressPercent = currentLevelTotalXP > 0 ? (currentXP / currentLevelTotalXP) * 100 : 0;
+    
     // Display results
     resultsDiv.innerHTML = `
         <div class="result-item">
             <div class="result-label">Total Experience Needed:</div>
-            <div class="result-value">${totalXPNeeded.toLocaleString()} XP</div>
+            <div class="result-value">${effectiveXPNeeded.toLocaleString()} XP</div>
         </div>
         <div class="result-item">
             <div class="result-label">Base XP/Hour (${selectedMethod}):</div>
             <div class="result-value">${baseXPPerHour.toLocaleString()} XP/hour</div>
         </div>
         <div class="result-item">
-            <div class="result-label">Effective XP/Hour:</div>
-            <div class="result-value">${Math.floor(effectiveXPPerHour).toLocaleString()} XP/hour</div>
+            <div class="result-label">Estimated Time:</div>
+            <div class="result-value">${formatTime(hoursNeeded)}</div>
         </div>
         <div class="result-item">
-            <div class="result-label">Time to Level:</div>
-            <div class="result-value">${formatTime(hoursNeeded)}</div>
+            <div class="result-label">Current Level Progress:</div>
+            <div class="result-value">${currentXP.toLocaleString()} / ${currentLevelTotalXP.toLocaleString()} (${progressPercent.toFixed(1)}%)</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Levels Remaining:</div>
+            <div class="result-value">${targetLevel - currentLevel}</div>
         </div>
         ${activeModifiers.length > 0 ? `
         <div class="result-item">
@@ -293,6 +301,28 @@ function calculateLevelingTime() {
     
     // Update zone recommendations
     updateZoneRecommendations(expansion, currentLevel, targetLevel);
+}
+
+// Calculate dynamic XP per hour based on level and play style
+function calculateDynamicXPPerHour(currentLevel, playStyle) {
+    let baseXPPerHour = 50000; // Base XP per hour
+    
+    switch (playStyle) {
+        case 'questing':
+            baseXPPerHour = currentLevel < 15 ? 30000 : currentLevel < 60 ? 80000 : 120000;
+            break;
+        case 'dungeons':
+            baseXPPerHour = currentLevel < 15 ? 40000 : currentLevel < 60 ? 100000 : 150000;
+            break;
+        case 'pvp':
+            baseXPPerHour = currentLevel < 15 ? 20000 : currentLevel < 60 ? 60000 : 100000;
+            break;
+        case 'grinding':
+            baseXPPerHour = currentLevel < 15 ? 25000 : currentLevel < 60 ? 70000 : 110000;
+            break;
+    }
+    
+    return baseXPPerHour;
 }
 
 function updateZoneRecommendations(expansion, currentLevel, targetLevel) {
@@ -314,6 +344,7 @@ function updateZoneRecommendations(expansion, currentLevel, targetLevel) {
         <div class="zone-item">
             <div class="zone-name">${zone.name}</div>
             <div class="zone-level">Level ${zone.level}</div>
+            <div class="zone-faction ${zone.faction.toLowerCase()}">${zone.faction}</div>
             <div class="expansion-tag">${zone.expansion}</div>
         </div>
     `).join('');
@@ -325,3 +356,11 @@ function updateZoneRecommendations(expansion, currentLevel, targetLevel) {
         </div>
     `;
 }
+
+// Add event listener for current XP input
+document.addEventListener('DOMContentLoaded', function() {
+    const currentXPInput = document.getElementById('currentXP');
+    if (currentXPInput) {
+        currentXPInput.addEventListener('input', calculateLevelingTime);
+    }
+});
