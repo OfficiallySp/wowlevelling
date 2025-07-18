@@ -68,6 +68,18 @@ input, select {
     font-size: 16px;
 }
 
+/* Style dropdown options */
+select option {
+    background: #2d2d2d;
+    color: #ffffff;
+    padding: 8px;
+}
+
+select option:hover {
+    background: #ffd700;
+    color: #000000;
+}
+
 input:focus, select:focus {
     outline: none;
     border-color: #ffd700;
