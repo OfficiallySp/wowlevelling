@@ -3,91 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WoW Classic Leveling Calculator</title>
+    <title>WoW Classic Leveling Calculator - Cataclysm/MOP</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1 class="title">World of Warcraft Classic</h1>
-            <h2 class="subtitle">Leveling Calculator</h2>
-        </header>
-
-        <div class="main-content">
-            <div class="calculator-panel">
-                <div class="expansion-selector">
-                    <label for="expansion">Select Expansion:</label>
-                    <select id="expansion" class="wow-select">
-                        <option value="vanilla">Vanilla (1-60)</option>
-                        <option value="tbc">The Burning Crusade (1-70)</option>
-                        <option value="wotlk">Wrath of the Lich King (1-80)</option>
-                        <option value="cataclysm">Cataclysm (1-85)</option>
-                        <option value="mop">Mists of Pandaria (1-90)</option>
+        <h1>WoW Classic Leveling Calculator</h1>
+        <p style="text-align: center; color: #cccccc; margin-bottom: 30px;">Cataclysm & Mists of Pandaria (Levels 1-90)</p>
+        
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Character Information</h3>
+                
+                <div class="input-group">
+                    <label for="currentLevel">Current Level:</label>
+                    <input type="number" id="currentLevel" min="1" max="89" value="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="targetLevel">Target Level:</label>
+                    <input type="number" id="targetLevel" min="2" max="90" value="90">
+                </div>
+                
+                <div class="input-group">
+                    <label for="currentXP">Current XP in Level:</label>
+                    <input type="number" id="currentXP" min="0" value="0">
+                </div>
+                
+                <div class="input-group">
+                    <label for="xpBonus">XP Bonus (%):</label>
+                    <select id="xpBonus">
+                        <option value="0">No Bonus</option>
+                        <option value="10">Rested XP (+10%)</option>
+                        <option value="20">Heirloom Gear (+20%)</option>
+                        <option value="30">Rested + Heirloom (+30%)</option>
+                        <option value="50">Guild Bonus (+50%)</option>
                     </select>
                 </div>
-
-                <div class="level-inputs">
-                    <div class="input-group">
-                        <label for="currentLevel">Current Level:</label>
-                        <input type="number" id="currentLevel" min="1" max="60" value="1" class="wow-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="targetLevel">Target Level:</label>
-                        <input type="number" id="targetLevel" min="1" max="60" value="60" class="wow-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="currentXP">Current XP in Level:</label>
-                        <input type="number" id="currentXP" min="0" value="0" class="wow-input">
-                    </div>
+                
+                <div class="input-group">
+                    <label for="playStyle">Play Style:</label>
+                    <select id="playStyle">
+                        <option value="questing">Questing</option>
+                        <option value="dungeon">Dungeon Grinding</option>
+                        <option value="mixed">Mixed (Questing + Dungeons)</option>
+                        <option value="pvp">PvP</option>
+                    </select>
                 </div>
-
-                <div class="experience-modifiers">
-                    <h3>Experience Modifiers</h3>
-                    <div class="modifier-group">
-                        <label>
-                            <input type="checkbox" id="restXP" class="wow-checkbox">
-                            Rested XP (200% for 1.5 levels)
-                        </label>
-                    </div>
-                    <div class="modifier-group">
-                        <label>
-                            <input type="checkbox" id="heirloomXP" class="wow-checkbox">
-                            Heirloom XP Bonus (+45%)
-                        </label>
-                    </div>
-                    <div class="modifier-group">
-                        <label>
-                            <input type="checkbox" id="recruitAFriend" class="wow-checkbox">
-                            Recruit-a-Friend (+300%)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="leveling-method">
-                    <h3>Primary Leveling Method</h3>
-                    <div class="method-buttons">
-                        <button id="questingBtn" class="method-btn active">Questing</button>
-                        <button id="dungeonBtn" class="method-btn">Dungeons</button>
-                        <button id="pvpBtn" class="method-btn">PvP</button>
-                        <button id="grindingBtn" class="method-btn">Grinding</button>
-                    </div>
-                </div>
-
-                <button id="calculateBtn" class="calculate-btn">Calculate Leveling Time</button>
+                
+                <button class="btn" onclick="calculateLeveling()">Calculate Leveling</button>
             </div>
-
-            <div class="results-panel">
-                <h3>Results</h3>
-                <div id="results" class="results-content">
-                    <p>Select your parameters and click "Calculate Leveling Time" to see results.</p>
+            
+            <div class="results-section">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Leveling Statistics</h3>
+                
+                <div class="result-item">
+                    <div class="result-label">Total XP Needed:</div>
+                    <div class="result-value" id="totalXP">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Estimated Time:</div>
+                    <div class="result-value" id="estimatedTime">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">XP per Hour Needed:</div>
+                    <div class="result-value" id="xpPerHour">-</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Current Level Progress:</div>
+                    <div class="result-value" id="levelProgress">-</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Levels Remaining:</div>
+                    <div class="result-value" id="levelsRemaining">-</div>
                 </div>
             </div>
-        </div>
-
-        <div class="zone-recommendations">
-            <h3>Recommended Zones</h3>
-            <div id="zoneRecommendations" class="zone-list">
-                <p>Zone recommendations will appear here after calculation.</p>
+            
+            <div class="zone-recommendations">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">Recommended Zones</h3>
+                <div class="zone-list" id="zoneList">
+                    <!-- Zone recommendations will be populated here -->
+                </div>
             </div>
         </div>
     </div>
