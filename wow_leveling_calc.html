@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoW Classic Leveling Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">World of Warcraft Classic</h1>
+            <h2 class="subtitle">Leveling Calculator</h2>
+        </header>
+
+        <div class="main-content">
+            <div class="calculator-panel">
+                <div class="expansion-selector">
+                    <label for="expansion">Select Expansion:</label>
+                    <select id="expansion" class="wow-select">
+                        <option value="vanilla">Vanilla (1-60)</option>
+                        <option value="tbc">The Burning Crusade (1-70)</option>
+                        <option value="wotlk">Wrath of the Lich King (1-80)</option>
+                        <option value="cataclysm">Cataclysm (1-85)</option>
+                        <option value="mop">Mists of Pandaria (1-90)</option>
+                    </select>
+                </div>
+
+                <div class="level-inputs">
+                    <div class="input-group">
+                        <label for="currentLevel">Current Level:</label>
+                        <input type="number" id="currentLevel" min="1" max="60" value="1" class="wow-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="targetLevel">Target Level:</label>
+                        <input type="number" id="targetLevel" min="1" max="60" value="60" class="wow-input">
+                    </div>
+                </div>
+
+                <div class="experience-modifiers">
+                    <h3>Experience Modifiers</h3>
+                    <div class="modifier-group">
+                        <label>
+                            <input type="checkbox" id="restXP" class="wow-checkbox">
+                            Rested XP (200% for 1.5 levels)
+                        </label>
+                    </div>
+                    <div class="modifier-group">
+                        <label>
+                            <input type="checkbox" id="heirloomXP" class="wow-checkbox">
+                            Heirloom XP Bonus (+45%)
+                        </label>
+                    </div>
+                    <div class="modifier-group">
+                        <label>
+                            <input type="checkbox" id="recruitAFriend" class="wow-checkbox">
+                            Recruit-a-Friend (+300%)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="leveling-method">
+                    <h3>Primary Leveling Method</h3>
+                    <div class="method-buttons">
+                        <button id="questingBtn" class="method-btn active">Questing</button>
+                        <button id="dungeonBtn" class="method-btn">Dungeons</button>
+                        <button id="pvpBtn" class="method-btn">PvP</button>
+                        <button id="grindingBtn" class="method-btn">Grinding</button>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" class="calculate-btn">Calculate Leveling Time</button>
+            </div>
+
+            <div class="results-panel">
+                <h3>Results</h3>
+                <div id="results" class="results-content">
+                    <p>Select your parameters and click "Calculate Leveling Time" to see results.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="zone-recommendations">
+            <h3>Recommended Zones</h3>
+            <div id="zoneRecommendations" class="zone-list">
+                <p>Zone recommendations will appear here after calculation.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

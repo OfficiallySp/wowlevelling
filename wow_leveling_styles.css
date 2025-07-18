@@ -1,0 +1,307 @@
+/* WoW Classic Leveling Calculator Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Friz Quadrata TT', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #f0f0f0;
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #2c1810 0%, #3d2817 50%, #4a2f1a 100%);
+    border: 3px solid #8b6914;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+    font-size: 2.5em;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.5em;
+    color: #c9aa71;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.calculator-panel, .results-panel {
+    background: linear-gradient(135deg, #2c1810 0%, #3d2817 50%, #4a2f1a 100%);
+    border: 3px solid #8b6914;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.expansion-selector {
+    margin-bottom: 25px;
+}
+
+.expansion-selector label {
+    display: block;
+    font-size: 1.1em;
+    color: #ffd700;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.wow-select {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid #8b6914;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.wow-select:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.level-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    color: #c9aa71;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.wow-input {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid #8b6914;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-size: 1em;
+}
+
+.wow-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.experience-modifiers {
+    margin-bottom: 25px;
+}
+
+.experience-modifiers h3 {
+    color: #ffd700;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.modifier-group {
+    margin-bottom: 12px;
+}
+
+.modifier-group label {
+    display: flex;
+    align-items: center;
+    color: #c9aa71;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.wow-checkbox {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: #ffd700;
+}
+
+.leveling-method {
+    margin-bottom: 25px;
+}
+
+.leveling-method h3 {
+    color: #ffd700;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.method-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.method-btn {
+    padding: 12px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid #8b6914;
+    border-radius: 8px;
+    color: #c9aa71;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+}
+
+.method-btn:hover {
+    background: linear-gradient(135deg, #2c1810 0%, #3d2817 100%);
+    color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.method-btn.active {
+    background: linear-gradient(135deg, #8b6914 0%, #a67c00 100%);
+    color: #000;
+    font-weight: bold;
+}
+
+.calculate-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #8b6914 0%, #a67c00 100%);
+    border: 3px solid #ffd700;
+    border-radius: 10px;
+    color: #000;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.calculate-btn:hover {
+    background: linear-gradient(135deg, #a67c00 0%, #cc9900 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.results-panel h3 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.results-content {
+    line-height: 1.6;
+}
+
+.result-item {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #8b6914;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.result-label {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.result-value {
+    color: #c9aa71;
+    font-size: 1.1em;
+}
+
+.zone-recommendations {
+    background: linear-gradient(135deg, #2c1810 0%, #3d2817 50%, #4a2f1a 100%);
+    border: 3px solid #8b6914;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.zone-recommendations h3 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.zone-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.zone-item {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #8b6914;
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.zone-item:hover {
+    border-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.zone-name {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.zone-level {
+    color: #c9aa71;
+    font-size: 0.9em;
+}
+
+.expansion-tag {
+    display: inline-block;
+    background: #8b6914;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .level-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .method-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .zone-list {
+        grid-template-columns: 1fr;
+    }
+}
