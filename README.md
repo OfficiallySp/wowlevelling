@@ -1,4 +1,3 @@
-````markdown
 # WoW Leveling Calculator
 
 A leveling calculator for World of Warcraft Classic, designed to provide accurate estimates and recommendations for efficient leveling.
