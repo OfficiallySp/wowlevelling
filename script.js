@@ -1,7 +1,7 @@
 // WoW Classic Leveling Calculator JavaScript
 
-// XP requirements for each level (1-90) - Actual in-game values from user screenshots
-const xpTable = {
+// XP requirements for MoP Classic (1-90)
+const xpTableMoP = {
     1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 6500,
     11: 6960, 12: 7700, 13: 8800, 14: 9700, 15: 10800, 16: 12000, 17: 13100, 18: 14240, 19: 15400, 20: 16600,
     21: 17920, 22: 19200, 23: 20400, 24: 21760, 25: 23120, 26: 24400, 27: 25760, 28: 27120, 29: 29040, 30: 31040,
@@ -11,6 +11,17 @@ const xpTable = {
     61: 317000, 62: 292400, 63: 292400, 64: 309600, 65: 320000, 66: 331600, 67: 585000, 68: 648000, 69: 717000, 70: 624800,
     71: 630800, 72: 638100, 73: 838000, 74: 847000, 75: 667800, 76: 680300, 77: 694100, 78: 709200, 79: 725600, 80: 1686300,
     81: 2121500, 82: 2669000, 83: 3434200, 84: 4582500, 85: 13000000, 86: 15080000, 87: 18980000, 88: 22880000, 89: 27560000, 90: 0
+};
+
+// XP requirements for TBC Anniversary (1-70) - Patch 2.4.3
+const xpTableTBC = {
+    1: 0, 2: 900, 3: 1400, 4: 2100, 5: 2800, 6: 3600, 7: 4500, 8: 5400, 9: 6500, 10: 7600,
+    11: 8700, 12: 9800, 13: 11000, 14: 12300, 15: 13600, 16: 15000, 17: 16400, 18: 17800, 19: 19300, 20: 20800,
+    21: 22400, 22: 24000, 23: 25500, 24: 27200, 25: 28900, 26: 30500, 27: 32200, 28: 33900, 29: 36300, 30: 38800,
+    31: 41600, 32: 44600, 33: 48000, 34: 51400, 35: 55000, 36: 58700, 37: 62400, 38: 66200, 39: 70200, 40: 74300,
+    41: 78500, 42: 82800, 43: 87100, 44: 91600, 45: 96300, 46: 101000, 47: 105800, 48: 110700, 49: 115700, 50: 120900,
+    51: 126100, 52: 131500, 53: 137000, 54: 142500, 55: 148200, 56: 154000, 57: 159900, 58: 165800, 59: 172000, 60: 494000,
+    61: 574700, 62: 614400, 63: 650300, 64: 682300, 65: 710200, 66: 734100, 67: 753700, 68: 768900, 69: 779700, 70: 0
 };
 
 // Zone recommendations by level ranges
@@ -91,15 +102,42 @@ const zoneRecommendations = {
     ]
 };
 
+function updateGameVersion() {
+    const version = document.getElementById('gameVersion').value;
+    const currentLevelInput = document.getElementById('currentLevel');
+    const targetLevelInput = document.getElementById('targetLevel');
+    
+    if (version === 'tbc') {
+        currentLevelInput.max = 69;
+        targetLevelInput.max = 70;
+        if (parseInt(targetLevelInput.value) > 70) {
+            targetLevelInput.value = 70;
+        }
+        if (parseInt(currentLevelInput.value) >= 70) {
+            currentLevelInput.value = 69;
+        }
+    } else {
+        currentLevelInput.max = 89;
+        targetLevelInput.max = 90;
+    }
+    
+    calculateLeveling();
+}
+
 function calculateLeveling() {
+    const version = document.getElementById('gameVersion').value;
     const currentLevel = parseInt(document.getElementById('currentLevel').value);
     const targetLevel = parseInt(document.getElementById('targetLevel').value);
     const currentXP = parseInt(document.getElementById('currentXP').value) || 0;
     const xpBonus = parseInt(document.getElementById('xpBonus').value);
     const playStyle = document.getElementById('playStyle').value;
 
+    const currentXpTable = version === 'tbc' ? xpTableTBC : xpTableMoP;
+    const maxLevel = version === 'tbc' ? 70 : 90;
+
     if (currentLevel >= targetLevel) {
-        alert('Target level must be higher than current level!');
+        // Only alert if we haven't already adjusted input which might trigger this
+        // alert('Target level must be higher than current level!');
         return;
     }
 
@@ -107,12 +145,12 @@ function calculateLeveling() {
     let totalXPNeeded = 0;
     
     // Add remaining XP for current level
-    const currentLevelXP = xpTable[currentLevel + 1] || 0;
+    const currentLevelXP = currentXpTable[currentLevel + 1] || 0;
     totalXPNeeded += (currentLevelXP - currentXP);
 
     // Add XP for all levels in between
     for (let level = currentLevel + 1; level < targetLevel; level++) {
-        totalXPNeeded += xpTable[level + 1] || 0;
+        totalXPNeeded += currentXpTable[level + 1] || 0;
     }
 
     // Apply XP bonus
@@ -120,19 +158,38 @@ function calculateLeveling() {
 
 
     let baseXPPerHour = 150000;
-    switch (playStyle) {
-        case 'questing':
-            baseXPPerHour = currentLevel < 15 ? 60000 : currentLevel < 60 ? 150000 : currentLevel < 80 ? 240000 : 300000;
-            break;
-        case 'dungeon':
-            baseXPPerHour = currentLevel < 15 ? 70000 : currentLevel < 60 ? 180000 : currentLevel < 80 ? 280000 : 350000;
-            break;
-        case 'mixed':
-            baseXPPerHour = currentLevel < 15 ? 65000 : currentLevel < 60 ? 165000 : currentLevel < 80 ? 260000 : 325000;
-            break;
-        case 'pvp':
-            baseXPPerHour = currentLevel < 15 ? 50000 : currentLevel < 60 ? 120000 : currentLevel < 80 ? 200000 : 250000;
-            break;
+    if (version === 'tbc') {
+        // TBC XP rates are generally lower than MoP rates
+        switch (playStyle) {
+            case 'questing':
+                baseXPPerHour = currentLevel < 15 ? 40000 : currentLevel < 40 ? 80000 : currentLevel < 58 ? 100000 : 250000;
+                break;
+            case 'dungeon':
+                baseXPPerHour = currentLevel < 15 ? 45000 : currentLevel < 40 ? 90000 : currentLevel < 58 ? 120000 : 280000;
+                break;
+            case 'mixed':
+                baseXPPerHour = currentLevel < 15 ? 42000 : currentLevel < 40 ? 85000 : currentLevel < 58 ? 110000 : 265000;
+                break;
+            case 'pvp':
+                baseXPPerHour = currentLevel < 15 ? 30000 : currentLevel < 40 ? 60000 : currentLevel < 58 ? 80000 : 180000;
+                break;
+        }
+    } else {
+        // MoP Rates (existing)
+        switch (playStyle) {
+            case 'questing':
+                baseXPPerHour = currentLevel < 15 ? 60000 : currentLevel < 60 ? 150000 : currentLevel < 80 ? 240000 : 300000;
+                break;
+            case 'dungeon':
+                baseXPPerHour = currentLevel < 15 ? 70000 : currentLevel < 60 ? 180000 : currentLevel < 80 ? 280000 : 350000;
+                break;
+            case 'mixed':
+                baseXPPerHour = currentLevel < 15 ? 65000 : currentLevel < 60 ? 165000 : currentLevel < 80 ? 260000 : 325000;
+                break;
+            case 'pvp':
+                baseXPPerHour = currentLevel < 15 ? 50000 : currentLevel < 60 ? 120000 : currentLevel < 80 ? 200000 : 250000;
+                break;
+        }
     }
 
     const estimatedTotalMinutes = Math.ceil(effectiveXPNeeded / baseXPPerHour * 60);
@@ -158,7 +215,7 @@ function calculateLeveling() {
     document.getElementById('levelsRemaining').textContent = targetLevel - currentLevel;
 
     // Current level progress
-    const currentLevelTotalXP = xpTable[currentLevel + 1] || 0;
+    const currentLevelTotalXP = currentXpTable[currentLevel + 1] || 0;
     const progressPercent = currentLevelTotalXP > 0 ? (currentXP / currentLevelTotalXP) * 100 : 0;
     document.getElementById('levelProgress').textContent = `${currentXP.toLocaleString()} / ${currentLevelTotalXP.toLocaleString()} (${progressPercent.toFixed(1)}%)`;
     document.getElementById('progressFill').style.width = `${progressPercent}%`;
@@ -194,6 +251,8 @@ function updateZoneRecommendations(currentLevel, targetLevel) {
 
 // Initialize calculator on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Set initial max levels based on default selection (TBC)
+    updateGameVersion(); 
     calculateLeveling();
 });
 

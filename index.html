@@ -6,15 +6,15 @@
 
     <!-- Primary Meta Tags -->
     <title>
-      WoW Classic Leveling Calculator - MoP Classic | Level 1-90 XP Calculator
+      WoW Classic Leveling Calculator - TBC Anniversary & MoP Classic
     </title>
     <meta
       name="title"
-      content="WoW Classic Leveling Calculator - MoP Classic | Level 1-90 XP Calculator"
+      content="WoW Classic Leveling Calculator - TBC Anniversary & MoP Classic"
     />
     <meta
       name="description"
-      content="Calculate your WoW Classic MoP Classic leveling time and XP requirements from levels 1-90. Get time estimates, and optimize your leveling strategy with heirloom bonuses."
+      content="Calculate your WoW Classic leveling time for TBC Anniversary and MoP Classic. Accurate XP tables, time estimates, and zone guides."
     />
     <meta
       name="keywords"
@@ -124,9 +124,14 @@
   <body>
     <div class="container">
       <h1>WoW Classic Leveling Calculator</h1>
-      <h2 style="text-align: center; color: #cccccc; margin-bottom: 30px">
-        MoP Classic (Levels 1-90)
-      </h2>
+      
+      <div class="input-group" style="text-align: center; max-width: 300px; margin: 0 auto 30px;">
+        <label for="gameVersion">Game Version</label>
+        <select id="gameVersion" onchange="updateGameVersion()">
+          <option value="mop">MoP Classic (1-90)</option>
+          <option value="tbc" selected>TBC Anniversary (1-70)</option>
+        </select>
+      </div>
       <p style="text-align: center; color: #cccccc; margin-bottom: 30px">
         Made by
         <a
@@ -163,9 +168,9 @@
             <select id="xpBonus">
               <option value="0">No Bonus</option>
               <option value="10">Rested XP (+10%)</option>
-              <option value="20">Heirloom Gear (+20%)</option>
+              <option value="20">Heirloom / Anniversary (+20%)</option>
               <option value="30">Rested + Heirloom (+30%)</option>
-              <option value="50">Guild Bonus (+50%)</option>
+              <option value="50">Guild / Joyous Journeys (+50%)</option>
             </select>
           </div>
 
