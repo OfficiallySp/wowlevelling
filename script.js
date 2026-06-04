@@ -396,10 +396,39 @@ function updateZoneRecommendations(currentLevel, targetLevel) {
     });
 }
 
+const RXP_DISCOUNT_CODE = 'FGJCV0TO7U';
+
+function initRestedXpAffiliate() {
+    const copyBtn = document.getElementById('rxpCopyCode');
+    const codeEl = document.getElementById('rxpDiscountCode');
+    if (!copyBtn || !codeEl) return;
+
+    copyBtn.addEventListener('click', async function() {
+        const originalLabel = copyBtn.textContent;
+        try {
+            await navigator.clipboard.writeText(RXP_DISCOUNT_CODE);
+            copyBtn.textContent = 'Copied!';
+        } catch {
+            const range = document.createRange();
+            range.selectNodeContents(codeEl);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            document.execCommand('copy');
+            selection.removeAllRanges();
+            copyBtn.textContent = 'Copied!';
+        }
+        setTimeout(function() {
+            copyBtn.textContent = originalLabel;
+        }, 2000);
+    });
+}
+
 // Initialize calculator on page load
 document.addEventListener('DOMContentLoaded', function() {
+    initRestedXpAffiliate();
     // Set initial max levels based on default selection (TBC)
-    updateGameVersion(); 
+    updateGameVersion();
     calculateLeveling();
 });
 

@@ -177,6 +177,228 @@ input:focus, select:focus {
     transition: width 0.3s ease;
 }
 
+/* RestedXP affiliate integration */
+.rxp-hero {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.rxp-hero-link {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    line-height: 0;
+    transition: transform 0.25s ease;
+}
+
+.rxp-hero-link:hover {
+    transform: translateY(-2px);
+}
+
+.rxp-hero-link:focus-visible {
+    outline: 2px solid #ffd700;
+    outline-offset: 3px;
+}
+
+.rxp-hero-link img {
+    width: 100%;
+    max-width: 728px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.rxp-code-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 16px;
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 15px;
+    color: #cccccc;
+}
+
+.rxp-code-strip code {
+    background: rgba(0, 0, 0, 0.35);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #ffd700;
+}
+
+.rxp-copy-btn {
+    padding: 8px 14px;
+    background: linear-gradient(45deg, #ffd700, #ffb347);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.rxp-copy-btn:hover {
+    transform: scale(1.03);
+}
+
+.rxp-copy-btn:focus-visible {
+    outline: 2px solid #ffd700;
+    outline-offset: 2px;
+}
+
+.rxp-affiliate-note {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    margin: 0;
+}
+
+.rxp-shop-link {
+    color: #ffd700;
+    font-weight: 600;
+}
+
+.rxp-shop-link:hover {
+    color: #ffd700;
+}
+
+.calculator-main {
+    min-width: 0;
+}
+
+.calculator-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .calculator-layout {
+        grid-template-columns: minmax(0, 1fr) 160px;
+    }
+
+    .rxp-aside {
+        grid-column: 2;
+        grid-row: 1;
+        position: sticky;
+        top: 20px;
+    }
+}
+
+.rxp-aside {
+    display: none;
+    justify-self: center;
+}
+
+@media (min-width: 900px) {
+    .rxp-aside {
+        display: block;
+    }
+}
+
+.rxp-aside-link {
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    line-height: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease;
+}
+
+.rxp-aside-link:hover {
+    transform: scale(1.02);
+}
+
+.rxp-aside-link img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.rxp-footer-promo {
+    margin-top: 28px;
+    text-align: center;
+}
+
+.rxp-footer-link {
+    display: inline-block;
+    max-width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    line-height: 0;
+    transition: transform 0.25s ease;
+}
+
+.rxp-footer-link:hover {
+    transform: scale(1.03);
+}
+
+.rxp-footer-link img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.rxp-inline-cta {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #cccccc;
+    text-align: center;
+}
+
+.rxp-inline-cta a {
+    color: #ffd700;
+    font-weight: 600;
+}
+
+.rxp-inline-cta a:hover {
+    color: #ffd700;
+}
+
+.rxp-medium-promo {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.rxp-medium-link {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    line-height: 0;
+    transition: transform 0.25s ease;
+}
+
+.rxp-medium-link:hover {
+    transform: translateY(-2px);
+}
+
+.rxp-medium-link:focus-visible {
+    outline: 2px solid #ffd700;
+    outline-offset: 3px;
+}
+
+.rxp-medium-link img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 @media (max-width: 768px) {
     .calculator-grid {
         grid-template-columns: 1fr;
