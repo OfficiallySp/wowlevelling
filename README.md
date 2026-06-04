@@ -2,6 +2,12 @@
 
 A leveling calculator for World of Warcraft Classic, designed to provide accurate estimates and recommendations for efficient leveling.
 
+## 💜 Sponsored By RestedXP
+
+Get premium WoW leveling guides from **[RestedXP](https://www.restedxp.com/)**! Use code **FGJCV0TO7U** for **10% off**.
+
+---
+
 ## Key Features
 
 - **Multi-Expansion Support:**
