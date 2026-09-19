@@ -1,53 +1,178 @@
-// WoW Classic Leveling Calculator JavaScript
-// XP Data sourced from Wowpedia (https://wowpedia.fandom.com/wiki/Experience_to_level)
+// WoW Leveling Calculator
+// -----------------------------------------------------------------------------
+// XP tables verified 19 September 2026 against Warcraft Wiki "Experience to level"
+// (https://warcraft.wiki.gg/wiki/Experience_to_level).
+//
+// Convention: XP_TABLES.x[level - 1] = experience required to advance FROM that
+// level to the next one. This matches the wiki tables directly, so the numbers
+// can be re-checked without re-indexing them.
+//
+// Which table each live version uses:
+//   WoW Forever      - vanilla 1.12 curve. Blizzard confirmed the 1-60 curve is
+//                      unchanged; only the XP sources were retuned.
+//   Classic Era      - vanilla 1.12 curve.
+//   TBC Anniversary  - post-patch 2.3 curve (levels 11-59 cut by up to ~18%).
+//   MoP Classic      - post-patch 5.3 curve. MoP Classic's Escalation patch
+//                      (31 March 2026) applied the 33% cut to levels 85-89.
+// -----------------------------------------------------------------------------
 
-// XP requirements for MoP Classic (1-90) - Pre-Patch 5.3 values
-// MoP Classic uses the original un-nerfed XP curve before the 33% reduction in patch 5.3
-const xpTableMoP = {
-    // Levels 1-10 (base values with Cataclysm 20% reduction applied to 10+)
-    1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 6500,
-    // Levels 11-20 (with 20% reduction from Cataclysm)
-    11: 6960, 12: 7840, 13: 8800, 14: 9840, 15: 10800, 16: 12000, 17: 13120, 18: 14240, 19: 15400, 20: 16640,
-    // Levels 21-30
-    21: 17920, 22: 19200, 23: 20400, 24: 21760, 25: 23120, 26: 24400, 27: 25760, 28: 27120, 29: 29040, 30: 31040,
-    // Levels 31-40
-    31: 33280, 32: 35680, 33: 38400, 34: 41120, 35: 44000, 36: 46960, 37: 49920, 38: 52960, 39: 56160, 40: 74300,
-    // Levels 41-50
-    41: 78500, 42: 82800, 43: 87100, 44: 91600, 45: 96300, 46: 101000, 47: 105800, 48: 110700, 49: 115700, 50: 120900,
-    // Levels 51-60
-    51: 126100, 52: 131500, 53: 137000, 54: 142500, 55: 148200, 56: 154000, 57: 159900, 58: 165800, 59: 172000, 60: 290000,
-    // Levels 61-70 (Outland - with WotLK reductions)
-    61: 317000, 62: 349000, 63: 386000, 64: 428000, 65: 475000, 66: 527000, 67: 585000, 68: 648000, 69: 717000, 70: 812700,
-    // Levels 71-80 (Northrend - with Patch 4.3 reductions)
-    71: 821000, 72: 830000, 73: 838000, 74: 847000, 75: 855300, 76: 865000, 77: 873000, 78: 882000, 79: 891000, 80: 1686300,
-    // Levels 81-85 (Cataclysm)
-    81: 2121500, 82: 2669000, 83: 3434200, 84: 4582500,
-    // Levels 85-90 (Pandaria - PRE-5.3 values, no 33% reduction)
-    85: 13000000, 86: 15080000, 87: 18980000, 88: 22880000, 89: 27560000, 90: 0
+const XP_TABLES = {
+    // Vanilla / Classic - total 1-60: 4,084,700
+    vanilla: [
+        400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600,
+        8800, 10100, 11400, 12900, 14400, 16000, 17700, 19400, 21300, 23200,
+        25200, 27300, 29400, 31700, 34000, 36400, 38900, 41400, 44300, 47400,
+        50800, 54500, 58600, 62800, 67100, 71600, 76100, 80800, 85700, 90700,
+        95800, 101000, 106300, 111800, 117500, 123200, 129100, 135100, 141200, 147500,
+        153900, 160400, 167100, 173900, 180800, 187900, 195000, 202300, 209800
+    ],
+
+    // The Burning Crusade, post-2.3 - total 1-70: 10,141,700 (3,379,400 of it is 1-60)
+    tbc: [
+        400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600,
+        8700, 9800, 11000, 12300, 13600, 15000, 16400, 17800, 19300, 20800,
+        22400, 24000, 25500, 27200, 28900, 30500, 32200, 33900, 36300, 38800,
+        41600, 44600, 48000, 51400, 55000, 58700, 62400, 66200, 70200, 74300,
+        78500, 82800, 87100, 91600, 96300, 101000, 105800, 110700, 115700, 120900,
+        126100, 131500, 137000, 142500, 148200, 154000, 159900, 165800, 172000, 494000,
+        574700, 614400, 650300, 682300, 710200, 734100, 753700, 768900, 779700
+    ],
+
+    // Mists of Pandaria, post-5.3 - total 1-90: 95,883,400 (64,990,000 of it is 85-90)
+    mop: [
+        400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 6080,
+        6960, 7840, 8800, 9840, 10800, 12000, 13120, 14240, 15400, 16640,
+        17920, 19200, 20400, 21760, 23120, 24400, 25760, 27120, 29040, 31040,
+        33280, 35680, 38400, 41120, 44000, 46960, 49920, 52960, 56160, 74300,
+        78500, 82800, 87100, 91600, 96300, 101000, 105800, 110700, 115700, 120900,
+        126100, 131500, 137000, 142500, 148200, 154000, 159900, 165800, 172000, 290000,
+        317000, 349000, 386000, 428000, 475000, 527000, 585000, 648000, 717000, 812700,
+        821000, 830000, 838000, 847000, 855300, 865000, 873000, 882000, 891000, 1686300,
+        2121500, 2642640, 3434200, 4582500, 8670000, 10050000, 12650000, 15250000, 18370000
+    ]
 };
 
-// XP requirements for TBC Anniversary (1-70) - Post-Patch 2.3 values
-// Patch 2.3 reduced XP requirements for levels 20-60 and increased quest XP rewards
-const xpTableTBC = {
-    // Levels 1-10 (unchanged from vanilla)
-    1: 0, 2: 400, 3: 900, 4: 1400, 5: 2100, 6: 2800, 7: 3600, 8: 4500, 9: 5400, 10: 7600,
-    // Levels 11-20 (with 2.3 reductions starting at 11)
-    11: 8700, 12: 9800, 13: 11000, 14: 12300, 15: 13600, 16: 15000, 17: 16400, 18: 17800, 19: 19300, 20: 20800,
-    // Levels 21-30 (with 2.3 ~18% reduction)
-    21: 22400, 22: 24000, 23: 25500, 24: 27200, 25: 28900, 26: 30500, 27: 32200, 28: 33900, 29: 36300, 30: 38800,
-    // Levels 31-40
-    31: 41600, 32: 44600, 33: 48000, 34: 51400, 35: 55000, 36: 58700, 37: 62400, 38: 66200, 39: 70200, 40: 74300,
-    // Levels 41-50
-    41: 78500, 42: 82800, 43: 87100, 44: 91600, 45: 96300, 46: 101000, 47: 105800, 48: 110700, 49: 115700, 50: 120900,
-    // Levels 51-60
-    51: 126100, 52: 131500, 53: 137000, 54: 142500, 55: 148200, 56: 154000, 57: 159900, 58: 165800, 59: 172000, 60: 494000,
-    // Levels 61-70 (Outland)
-    61: 574700, 62: 614400, 63: 650300, 64: 682300, 65: 710200, 66: 734100, 67: 753700, 68: 768900, 69: 779700, 70: 0
+// How fast you play, relative to the baseline rates below.
+// Baseline ("average") assumes a normal route, no guide addon, some downtime.
+const PACE_MULTIPLIERS = {
+    casual: 0.6,
+    average: 1.0,
+    optimized: 1.6
 };
 
-// Zone recommendations by level ranges (sourced from Wowhead zone guides)
-// TBC zones use Classic TBC level ranges, MoP zones include Cataclysm revamps
-const zoneRecommendationsTBC = {
+// -----------------------------------------------------------------------------
+// Zone recommendations
+// -----------------------------------------------------------------------------
+
+const ZONES_CLASSIC = {
+    "1-10": [
+        { name: "Elwynn Forest", level: "1-10", faction: "Alliance" },
+        { name: "Dun Morogh", level: "1-10", faction: "Alliance" },
+        { name: "Teldrassil", level: "1-10", faction: "Alliance" },
+        { name: "Durotar", level: "1-10", faction: "Horde" },
+        { name: "Mulgore", level: "1-10", faction: "Horde" },
+        { name: "Tirisfal Glades", level: "1-10", faction: "Horde" }
+    ],
+    "10-20": [
+        { name: "Westfall", level: "10-20", faction: "Alliance" },
+        { name: "Loch Modan", level: "10-20", faction: "Alliance" },
+        { name: "Darkshore", level: "10-20", faction: "Alliance" },
+        { name: "The Barrens", level: "10-25", faction: "Horde" },
+        { name: "Silverpine Forest", level: "10-20", faction: "Horde" }
+    ],
+    "20-30": [
+        { name: "Redridge Mountains", level: "15-25", faction: "Alliance" },
+        { name: "Duskwood", level: "18-30", faction: "Alliance" },
+        { name: "Wetlands", level: "20-30", faction: "Alliance" },
+        { name: "Hillsbrad Foothills", level: "20-30", faction: "Horde" },
+        { name: "Ashenvale", level: "18-30", faction: "Both" },
+        { name: "Stonetalon Mountains", level: "15-27", faction: "Both" },
+        { name: "Thousand Needles", level: "25-35", faction: "Both" }
+    ],
+    "30-40": [
+        { name: "Stranglethorn Vale", level: "30-45", faction: "Both" },
+        { name: "Arathi Highlands", level: "30-40", faction: "Both" },
+        { name: "Desolace", level: "30-40", faction: "Both" },
+        { name: "Dustwallow Marsh", level: "35-45", faction: "Both" },
+        { name: "Badlands", level: "35-45", faction: "Both" }
+    ],
+    "40-50": [
+        { name: "Tanaris", level: "40-50", faction: "Both" },
+        { name: "Feralas", level: "40-50", faction: "Both" },
+        { name: "The Hinterlands", level: "40-50", faction: "Both" },
+        { name: "Searing Gorge", level: "43-50", faction: "Both" },
+        { name: "Azshara", level: "45-55", faction: "Both" }
+    ],
+    "50-60": [
+        { name: "Un'Goro Crater", level: "48-55", faction: "Both" },
+        { name: "Felwood", level: "48-55", faction: "Both" },
+        { name: "Western Plaguelands", level: "50-58", faction: "Both" },
+        { name: "Eastern Plaguelands", level: "53-60", faction: "Both" },
+        { name: "Winterspring", level: "53-60", faction: "Both" },
+        { name: "Burning Steppes", level: "50-58", faction: "Both" },
+        { name: "Blasted Lands", level: "48-55", faction: "Both" },
+        { name: "Silithus", level: "55-60", faction: "Both" }
+    ]
+};
+
+// Forever keeps the Classic world and adds four new zones plus expanded old ones.
+const ZONES_FOREVER = {
+    "1-12": [
+        { name: "Zephras Isle", level: "1-12", faction: "Skyborne", isNew: true },
+        { name: "Elwynn Forest", level: "1-10", faction: "Alliance" },
+        { name: "Dun Morogh", level: "1-10", faction: "Alliance" },
+        { name: "Teldrassil", level: "1-10", faction: "Alliance" },
+        { name: "Durotar", level: "1-10", faction: "Horde" },
+        { name: "Mulgore", level: "1-10", faction: "Horde" },
+        { name: "Tirisfal Glades", level: "1-10", faction: "Horde" }
+    ],
+    "12-20": [
+        { name: "Westfall", level: "10-20", faction: "Alliance" },
+        { name: "Loch Modan", level: "10-20", faction: "Alliance" },
+        { name: "Darkshore", level: "10-20", faction: "Alliance" },
+        { name: "The Barrens", level: "10-25", faction: "Horde" },
+        { name: "Silverpine Forest", level: "10-20", faction: "Horde" }
+    ],
+    "20-30": [
+        { name: "Wetlands", level: "20-30", faction: "Alliance", isNew: true, note: "Expanded questing" },
+        { name: "Redridge Mountains", level: "15-25", faction: "Alliance" },
+        { name: "Duskwood", level: "18-30", faction: "Alliance" },
+        { name: "Hillsbrad Foothills", level: "20-30", faction: "Horde" },
+        { name: "Ashenvale", level: "18-30", faction: "Both" },
+        { name: "Stonetalon Mountains", level: "15-27", faction: "Both" },
+        { name: "Thousand Needles", level: "25-35", faction: "Both" }
+    ],
+    "30-40": [
+        { name: "The Riverglades", level: "35-45", faction: "Both", isNew: true, note: "150+ new quests" },
+        { name: "Desolace", level: "30-40", faction: "Both", isNew: true, note: "Expanded questing" },
+        { name: "Stranglethorn Vale", level: "30-45", faction: "Both" },
+        { name: "Arathi Highlands", level: "30-40", faction: "Both" },
+        { name: "Dustwallow Marsh", level: "35-45", faction: "Both" },
+        { name: "Badlands", level: "35-45", faction: "Both" }
+    ],
+    "40-50": [
+        { name: "The Riverglades", level: "35-45", faction: "Both", isNew: true },
+        { name: "Krol'dok Stronghold", level: "40-45", faction: "Outdoor dungeon", isNew: true },
+        { name: "Tanaris", level: "40-50", faction: "Both" },
+        { name: "Feralas", level: "40-50", faction: "Both" },
+        { name: "The Hinterlands", level: "40-50", faction: "Both" },
+        { name: "Searing Gorge", level: "43-50", faction: "Both" },
+        { name: "Azshara", level: "45-55", faction: "Both" }
+    ],
+    "50-60": [
+        { name: "Shen'dralas", level: "Level range TBA", faction: "Both", isNew: true },
+        { name: "Mount Hyjal", level: "60 - endgame", faction: "Both", isNew: true },
+        { name: "Un'Goro Crater", level: "48-55", faction: "Both" },
+        { name: "Felwood", level: "48-55", faction: "Both" },
+        { name: "Western Plaguelands", level: "50-58", faction: "Both" },
+        { name: "Eastern Plaguelands", level: "53-60", faction: "Both" },
+        { name: "Winterspring", level: "53-60", faction: "Both" },
+        { name: "Burning Steppes", level: "50-58", faction: "Both" },
+        { name: "Silithus", level: "55-60", faction: "Both" }
+    ]
+};
+
+const ZONES_TBC = {
     "1-12": [
         { name: "Elwynn Forest", level: "1-12", faction: "Alliance" },
         { name: "Dun Morogh", level: "1-12", faction: "Alliance" },
@@ -108,7 +233,7 @@ const zoneRecommendationsTBC = {
     ]
 };
 
-const zoneRecommendationsMoP = {
+const ZONES_MOP = {
     "1-10": [
         { name: "Elwynn Forest", level: "1-10", faction: "Alliance" },
         { name: "Dun Morogh", level: "1-10", faction: "Alliance" },
@@ -117,7 +242,8 @@ const zoneRecommendationsMoP = {
         { name: "Durotar", level: "1-10", faction: "Horde" },
         { name: "Mulgore", level: "1-10", faction: "Horde" },
         { name: "Tirisfal Glades", level: "1-10", faction: "Horde" },
-        { name: "Eversong Woods", level: "1-10", faction: "Horde" }
+        { name: "Eversong Woods", level: "1-10", faction: "Horde" },
+        { name: "The Wandering Isle", level: "1-10", faction: "Pandaren" }
     ],
     "10-20": [
         { name: "Westfall", level: "10-15", faction: "Alliance" },
@@ -192,205 +318,281 @@ const zoneRecommendationsMoP = {
     ]
 };
 
+// -----------------------------------------------------------------------------
+// Version configuration
+// -----------------------------------------------------------------------------
+// Rate bands are XP/hour at the "average" pace with no XP bonus active, and
+// apply while your level is below `upTo`. They are calibrated so a full run
+// lands inside the completion times players actually report (see README).
+
+const GAME_VERSIONS = {
+    forever: {
+        label: "WoW Forever (1-60)",
+        maxLevel: 60,
+        xpTable: XP_TABLES.vanilla,
+        zones: ZONES_FOREVER,
+        note: "WoW Forever launches 4 November 2026 (beta since 17 September). The 1-60 XP curve is unchanged from Classic, but dungeon mob XP is cut and dungeon quest XP is raised, so questing is intended to be the fastest route. Rates below are pre-launch estimates and will be updated once live data lands.",
+        rates: {
+            questing: [[10, 21000], [20, 30000], [30, 44000], [40, 58000], [50, 71000], [60, 86000]],
+            dungeon: [[10, 13000], [20, 18000], [30, 27000], [40, 35000], [50, 43000], [60, 52000]],
+            mixed: [[10, 22000], [20, 31000], [30, 46000], [40, 60000], [50, 74000], [60, 89000]],
+            pvp: [[10, 8000], [20, 11000], [30, 15000], [40, 20000], [50, 25000], [60, 30000]]
+        },
+        bonuses: [
+            { id: "rested", label: "Rested XP (typical play)", value: 15 },
+            { id: "restedHeavy", label: "Always rested (alt / short sessions)", value: 30 },
+            { id: "joyous", label: "Joyous Journeys-style buff, if enabled", value: 50 }
+        ]
+    },
+
+    classic: {
+        label: "Classic Era (1-60)",
+        maxLevel: 60,
+        xpTable: XP_TABLES.vanilla,
+        zones: ZONES_CLASSIC,
+        note: "Classic Era and Hardcore realms run the original 1.12 XP curve - 4,084,700 XP from 1 to 60, with no heirlooms and no XP buffs.",
+        rates: {
+            questing: [[10, 18000], [20, 26000], [30, 38000], [40, 50000], [50, 62000], [60, 75000]],
+            dungeon: [[10, 12000], [20, 22000], [30, 36000], [40, 48000], [50, 55000], [60, 62000]],
+            mixed: [[10, 17000], [20, 27000], [30, 40000], [40, 53000], [50, 64000], [60, 77000]],
+            pvp: [[10, 6000], [20, 9000], [30, 13000], [40, 17000], [50, 21000], [60, 26000]]
+        },
+        bonuses: [
+            { id: "rested", label: "Rested XP (typical play)", value: 15 },
+            { id: "restedHeavy", label: "Always rested (alt / short sessions)", value: 30 }
+        ]
+    },
+
+    tbc: {
+        label: "TBC Anniversary (1-70)",
+        maxLevel: 70,
+        xpTable: XP_TABLES.tbc,
+        zones: ZONES_TBC,
+        note: "TBC Anniversary opened the Dark Portal on 5 February 2026 and uses the post-2.3 curve, so levels 11-59 need up to ~18% less XP than vanilla. Outland (58-70) is roughly 70% of the total XP but the fastest half of the run.",
+        rates: {
+            questing: [[10, 25000], [20, 38000], [30, 55000], [40, 72000], [50, 92000], [58, 125000], [62, 300000], [66, 420000], [70, 480000]],
+            dungeon: [[10, 15000], [20, 34000], [30, 55000], [40, 75000], [50, 95000], [58, 120000], [62, 280000], [66, 400000], [70, 460000]],
+            mixed: [[10, 25000], [20, 40000], [30, 58000], [40, 76000], [50, 97000], [58, 130000], [62, 310000], [66, 435000], [70, 500000]],
+            pvp: [[10, 10000], [20, 16000], [30, 24000], [40, 32000], [50, 41000], [58, 55000], [70, 150000]]
+        },
+        bonuses: [
+            { id: "rested", label: "Rested XP (typical play)", value: 15 },
+            { id: "restedHeavy", label: "Always rested (alt / short sessions)", value: 30 },
+            { id: "joyous", label: "Joyous Journeys buff, if Blizzard enables it", value: 50 }
+        ]
+    },
+
+    mop: {
+        label: "MoP Classic (1-90)",
+        maxLevel: 90,
+        xpTable: XP_TABLES.mop,
+        zones: ZONES_MOP,
+        note: "MoP Classic is on patch 5.5.3 / Siege of Orgrimmar. The Escalation patch (31 March 2026) applied the 5.3 cut, so 85-90 now needs 64,990,000 XP instead of 97,500,000. The Joyous Journeys +50% buff ran 21 April - early June 2026 and is no longer active.",
+        rates: {
+            questing: [[10, 45000], [20, 65000], [30, 140000], [40, 210000], [50, 350000], [60, 575000], [70, 1200000], [80, 1950000], [85, 3700000], [90, 7400000]],
+            dungeon: [[15, 50000], [30, 160000], [40, 230000], [50, 390000], [60, 645000], [70, 1380000], [80, 2240000], [85, 4150000], [90, 8500000]],
+            mixed: [[10, 48000], [20, 70000], [30, 150000], [40, 225000], [50, 375000], [60, 620000], [70, 1290000], [80, 2100000], [85, 4000000], [90, 8000000]],
+            pvp: [[20, 35000], [30, 75000], [40, 115000], [50, 190000], [60, 315000], [70, 660000], [80, 1070000], [85, 2030000], [90, 4070000]]
+        },
+        bonuses: [
+            { id: "rested", label: "Rested XP (typical play)", value: 15 },
+            { id: "heirlooms", label: "Heirloom chest + shoulders", value: 20 },
+            { id: "guild", label: "Guild perk: Fast Track", value: 10 },
+            { id: "joyous", label: "Joyous Journeys buff, if it returns", value: 50 }
+        ]
+    }
+};
+
+// -----------------------------------------------------------------------------
+// Calculator
+// -----------------------------------------------------------------------------
+
+function getVersion() {
+    return GAME_VERSIONS[document.getElementById('gameVersion').value] || GAME_VERSIONS.forever;
+}
+
+// XP needed to advance from `level` to the next one.
+function xpToAdvance(version, level) {
+    return version.xpTable[level - 1] || 0;
+}
+
+function xpPerHourAt(version, playStyle, level) {
+    const bands = version.rates[playStyle] || version.rates.questing;
+    for (const [upTo, rate] of bands) {
+        if (level < upTo) return rate;
+    }
+    return bands[bands.length - 1][1];
+}
+
+function activeBonus() {
+    let total = 0;
+    document.querySelectorAll('.xp-bonus-option input:checked').forEach(input => {
+        total += parseInt(input.value, 10) || 0;
+    });
+    return total;
+}
+
+function renderBonusOptions() {
+    const version = getVersion();
+    const container = document.getElementById('xpBonuses');
+    if (!container) return;
+
+    const checked = new Set(
+        Array.from(container.querySelectorAll('input:checked')).map(input => input.dataset.bonusId)
+    );
+
+    container.innerHTML = '';
+    version.bonuses.forEach(bonus => {
+        const wrapper = document.createElement('label');
+        wrapper.className = 'xp-bonus-option';
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = bonus.value;
+        input.dataset.bonusId = bonus.id;
+        // Rested and "always rested" describe the same buff, so they never stack.
+        if (checked.has(bonus.id)) input.checked = true;
+        input.addEventListener('change', function () {
+            if (this.checked && (this.dataset.bonusId === 'rested' || this.dataset.bonusId === 'restedHeavy')) {
+                const other = this.dataset.bonusId === 'rested' ? 'restedHeavy' : 'rested';
+                const otherInput = container.querySelector(`input[data-bonus-id="${other}"]`);
+                if (otherInput) otherInput.checked = false;
+            }
+            calculateLeveling();
+        });
+
+        const text = document.createElement('span');
+        text.textContent = `${bonus.label} (+${bonus.value}%)`;
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(text);
+        container.appendChild(wrapper);
+    });
+}
+
+let activeVersionId = null;
+
 function updateGameVersion() {
-    const version = document.getElementById('gameVersion').value;
+    const versionId = document.getElementById('gameVersion').value;
+    const version = GAME_VERSIONS[versionId] || GAME_VERSIONS.forever;
+    const previous = GAME_VERSIONS[activeVersionId];
     const currentLevelInput = document.getElementById('currentLevel');
     const targetLevelInput = document.getElementById('targetLevel');
-    
-    if (version === 'tbc') {
-        currentLevelInput.max = 69;
-        targetLevelInput.max = 70;
-        if (parseInt(targetLevelInput.value) > 70) {
-            targetLevelInput.value = 70;
-        }
-        if (parseInt(currentLevelInput.value) >= 70) {
-            currentLevelInput.value = 69;
-        }
-    } else {
-        currentLevelInput.max = 89;
-        targetLevelInput.max = 90;
+
+    currentLevelInput.max = version.maxLevel - 1;
+    targetLevelInput.max = version.maxLevel;
+
+    const target = parseInt(targetLevelInput.value, 10);
+    if (previous && target === previous.maxLevel) {
+        // Target was parked at the old level cap, so follow the new one.
+        targetLevelInput.value = version.maxLevel;
+    } else if (target > version.maxLevel) {
+        targetLevelInput.value = version.maxLevel;
     }
-    
+    if (parseInt(currentLevelInput.value, 10) >= version.maxLevel) {
+        currentLevelInput.value = version.maxLevel - 1;
+    }
+
+    const noteEl = document.getElementById('versionNote');
+    if (noteEl) noteEl.textContent = version.note;
+
+    activeVersionId = versionId;
+    renderBonusOptions();
     calculateLeveling();
 }
 
+function formatDuration(totalMinutes) {
+    const days = Math.floor(totalMinutes / (24 * 60));
+    const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+    const minutes = Math.round(totalMinutes % 60);
+
+    if (days > 0) return `${days} days, ${hours} hours, ${minutes} minutes`;
+    if (hours > 0) return `${hours} hours, ${minutes} minutes`;
+    return `${minutes} minutes`;
+}
+
 function calculateLeveling() {
-    const version = document.getElementById('gameVersion').value;
-    const currentLevel = parseInt(document.getElementById('currentLevel').value);
-    const targetLevel = parseInt(document.getElementById('targetLevel').value);
-    const currentXP = parseInt(document.getElementById('currentXP').value) || 0;
-    const xpBonus = parseInt(document.getElementById('xpBonus').value);
+    const version = getVersion();
+    const currentLevel = parseInt(document.getElementById('currentLevel').value, 10);
+    const targetLevel = parseInt(document.getElementById('targetLevel').value, 10);
+    const currentXP = parseInt(document.getElementById('currentXP').value, 10) || 0;
     const playStyle = document.getElementById('playStyle').value;
+    const pace = PACE_MULTIPLIERS[document.getElementById('pace').value] || 1;
+    const bonus = activeBonus();
 
-    const currentXpTable = version === 'tbc' ? xpTableTBC : xpTableMoP;
-    const maxLevel = version === 'tbc' ? 70 : 90;
-
-    if (currentLevel >= targetLevel) {
-        // Only alert if we haven't already adjusted input which might trigger this
-        // alert('Target level must be higher than current level!');
+    if (!currentLevel || !targetLevel || currentLevel >= targetLevel || targetLevel > version.maxLevel) {
         return;
     }
 
-    // Calculate total XP needed
+    // Walk level by level: both the XP required and the XP/hour you can earn
+    // change as you go, so a single flat rate over a long span is way off.
     let totalXPNeeded = 0;
-    
-    // Add remaining XP for current level
-    const currentLevelXP = currentXpTable[currentLevel + 1] || 0;
-    totalXPNeeded += (currentLevelXP - currentXP);
+    let totalHours = 0;
 
-    // Add XP for all levels in between
-    for (let level = currentLevel + 1; level < targetLevel; level++) {
-        totalXPNeeded += currentXpTable[level + 1] || 0;
+    for (let level = currentLevel; level < targetLevel; level++) {
+        const levelXP = xpToAdvance(version, level);
+        const remaining = level === currentLevel ? Math.max(0, levelXP - currentXP) : levelXP;
+        const effectiveRate = xpPerHourAt(version, playStyle, level) * pace * (1 + bonus / 100);
+
+        totalXPNeeded += remaining;
+        totalHours += remaining / effectiveRate;
     }
 
-    // Apply XP bonus
-    const effectiveXPNeeded = Math.floor(totalXPNeeded * (100 / (100 + xpBonus)));
+    const averageRate = totalHours > 0 ? Math.round(totalXPNeeded / totalHours) : 0;
 
-
-    // XP per hour rates based on real player data and leveling guides
-    // Sources: ExpertBeacon, Wowhead, community leveling data
-    // TBC Classic: Casual 72-96 hours, Experienced 48-72 hours for 1-70
-    // MoP Classic: Optimized 16-38 hours, Casual 50-100+ hours for 1-90
-    
-    let baseXPPerHour = 150000;
-    if (version === 'tbc') {
-        // TBC Anniversary XP rates
-        // Total XP 1-70 ≈ 9.6M, targeting 48-96 hours = 100k-200k XP/hour average
-        switch (playStyle) {
-            case 'questing':
-                // Most efficient method for TBC, especially with quest helper addons
-                if (currentLevel < 10) baseXPPerHour = 25000;      // Starter zones
-                else if (currentLevel < 20) baseXPPerHour = 50000; // Early zones
-                else if (currentLevel < 40) baseXPPerHour = 90000; // Mid-game
-                else if (currentLevel < 58) baseXPPerHour = 120000; // Late classic content
-                else baseXPPerHour = 200000; // Outland (faster quests, better rewards)
-                break;
-            case 'dungeon':
-                // Dungeon grinding with good groups, includes queue times
-                if (currentLevel < 15) baseXPPerHour = 30000;      // Limited dungeons
-                else if (currentLevel < 40) baseXPPerHour = 100000; // Classic dungeons
-                else if (currentLevel < 58) baseXPPerHour = 130000; // Higher level dungeons
-                else baseXPPerHour = 220000; // TBC dungeons (excellent XP)
-                break;
-            case 'mixed':
-                // Quest while in dungeon queue - generally optimal
-                if (currentLevel < 15) baseXPPerHour = 28000;
-                else if (currentLevel < 40) baseXPPerHour = 95000;
-                else if (currentLevel < 58) baseXPPerHour = 125000;
-                else baseXPPerHour = 210000;
-                break;
-            case 'pvp':
-                // Battleground XP is slower but can be fun
-                if (currentLevel < 20) baseXPPerHour = 20000;
-                else if (currentLevel < 40) baseXPPerHour = 50000;
-                else if (currentLevel < 58) baseXPPerHour = 70000;
-                else baseXPPerHour = 120000; // TBC BGs
-                break;
-        }
-    } else {
-        // MoP Classic XP rates
-        // Total XP 1-90 ≈ 127M (pre-5.3), with 85-90 being ~97M alone
-        // Targeting 50-100 hours = 1.3M-2.5M XP/hour average
-        switch (playStyle) {
-            case 'questing':
-                // Standard questing, most consistent method
-                if (currentLevel < 15) baseXPPerHour = 50000;       // Starter zones
-                else if (currentLevel < 40) baseXPPerHour = 150000;  // Classic zones (streamlined)
-                else if (currentLevel < 60) baseXPPerHour = 200000;  // Late classic
-                else if (currentLevel < 70) baseXPPerHour = 400000;  // Outland
-                else if (currentLevel < 80) baseXPPerHour = 600000;  // Northrend
-                else if (currentLevel < 85) baseXPPerHour = 1500000; // Cataclysm (huge XP requirements)
-                else baseXPPerHour = 3500000; // Pandaria (massive XP, efficient quests)
-                break;
-            case 'dungeon':
-                // Dungeon spam, very efficient with instant queues (tank/healer)
-                if (currentLevel < 15) baseXPPerHour = 60000;
-                else if (currentLevel < 40) baseXPPerHour = 180000;
-                else if (currentLevel < 60) baseXPPerHour = 250000;
-                else if (currentLevel < 70) baseXPPerHour = 500000;
-                else if (currentLevel < 80) baseXPPerHour = 750000;
-                else if (currentLevel < 85) baseXPPerHour = 2000000;
-                else baseXPPerHour = 4500000; // Pandaria dungeons + monkey runs
-                break;
-            case 'mixed':
-                // Quest while in queue - optimal for DPS with longer queues
-                if (currentLevel < 15) baseXPPerHour = 55000;
-                else if (currentLevel < 40) baseXPPerHour = 165000;
-                else if (currentLevel < 60) baseXPPerHour = 225000;
-                else if (currentLevel < 70) baseXPPerHour = 450000;
-                else if (currentLevel < 80) baseXPPerHour = 675000;
-                else if (currentLevel < 85) baseXPPerHour = 1750000;
-                else baseXPPerHour = 4000000;
-                break;
-            case 'pvp':
-                // BG leveling, slower but available
-                if (currentLevel < 20) baseXPPerHour = 35000;
-                else if (currentLevel < 40) baseXPPerHour = 100000;
-                else if (currentLevel < 60) baseXPPerHour = 150000;
-                else if (currentLevel < 70) baseXPPerHour = 300000;
-                else if (currentLevel < 80) baseXPPerHour = 450000;
-                else if (currentLevel < 85) baseXPPerHour = 1000000;
-                else baseXPPerHour = 2500000;
-                break;
-        }
-    }
-
-    const estimatedTotalMinutes = Math.ceil(effectiveXPNeeded / baseXPPerHour * 60);
-    const estimatedDays = Math.floor(estimatedTotalMinutes / (24 * 60));
-    const remainingMinutes = estimatedTotalMinutes % (24 * 60);
-    const estimatedHours = Math.floor(remainingMinutes / 60);
-    const finalMinutes = remainingMinutes % 60;
-
-    // Update results
-    document.getElementById('totalXP').textContent = effectiveXPNeeded.toLocaleString();
-    
-    let timeString = '';
-    if (estimatedDays > 0) {
-        timeString = `${estimatedDays} days, ${estimatedHours} hours, ${finalMinutes} minutes`;
-    } else if (estimatedHours > 0) {
-        timeString = `${estimatedHours} hours, ${finalMinutes} minutes`;
-    } else {
-        timeString = `${finalMinutes} minutes`;
-    }
-    document.getElementById('estimatedTime').textContent = timeString;
-    
-    document.getElementById('xpPerHour').textContent = baseXPPerHour.toLocaleString();
+    document.getElementById('totalXP').textContent = totalXPNeeded.toLocaleString();
+    document.getElementById('estimatedTime').textContent = formatDuration(totalHours * 60);
+    document.getElementById('xpPerHour').textContent = averageRate.toLocaleString();
     document.getElementById('levelsRemaining').textContent = targetLevel - currentLevel;
 
-    // Current level progress
-    const currentLevelTotalXP = currentXpTable[currentLevel + 1] || 0;
-    const progressPercent = currentLevelTotalXP > 0 ? (currentXP / currentLevelTotalXP) * 100 : 0;
-    document.getElementById('levelProgress').textContent = `${currentXP.toLocaleString()} / ${currentLevelTotalXP.toLocaleString()} (${progressPercent.toFixed(1)}%)`;
+    const bonusEl = document.getElementById('activeBonus');
+    if (bonusEl) {
+        bonusEl.textContent = bonus > 0 ? `+${bonus}% XP` : 'None';
+    }
+
+    const currentLevelXP = xpToAdvance(version, currentLevel);
+    const progressPercent = currentLevelXP > 0 ? Math.min(100, (currentXP / currentLevelXP) * 100) : 0;
+    document.getElementById('levelProgress').textContent =
+        `${currentXP.toLocaleString()} / ${currentLevelXP.toLocaleString()} (${progressPercent.toFixed(1)}%)`;
     document.getElementById('progressFill').style.width = `${progressPercent}%`;
 
-    // Update zone recommendations
     updateZoneRecommendations(currentLevel, targetLevel);
 }
 
 function updateZoneRecommendations(currentLevel, targetLevel) {
-    const version = document.getElementById('gameVersion').value;
+    const version = getVersion();
     const zoneList = document.getElementById('zoneList');
     zoneList.innerHTML = '';
 
-    // Select the appropriate zone recommendations based on game version
-    const zoneRecommendations = version === 'tbc' ? zoneRecommendationsTBC : zoneRecommendationsMoP;
-
-    // Determine which level ranges to show
-    const levelRanges = Object.keys(zoneRecommendations);
-    const relevantRanges = levelRanges.filter(range => {
+    const relevantRanges = Object.keys(version.zones).filter(range => {
         const [min, max] = range.split('-').map(Number);
         return currentLevel <= max && targetLevel >= min;
     });
 
     relevantRanges.forEach(range => {
-        const zones = zoneRecommendations[range];
-        zones.forEach(zone => {
+        version.zones[range].forEach(zone => {
             const zoneElement = document.createElement('div');
             zoneElement.className = 'zone-item';
-            zoneElement.innerHTML = `
-                <div class="zone-name">${zone.name}</div>
-                <div class="zone-level">Level ${zone.level} - ${zone.faction}</div>
-            `;
+
+            const name = document.createElement('div');
+            name.className = 'zone-name';
+            name.textContent = zone.name;
+            if (zone.isNew) {
+                const badge = document.createElement('span');
+                badge.className = 'zone-new-badge';
+                badge.textContent = 'NEW';
+                name.appendChild(badge);
+            }
+
+            const detail = document.createElement('div');
+            detail.className = 'zone-level';
+            const levelText = /^\d/.test(zone.level) ? `Level ${zone.level}` : zone.level;
+            detail.textContent = zone.note
+                ? `${levelText} - ${zone.faction} - ${zone.note}`
+                : `${levelText} - ${zone.faction}`;
+
+            zoneElement.appendChild(name);
+            zoneElement.appendChild(detail);
             zoneList.appendChild(zoneElement);
         });
     });
@@ -424,17 +626,18 @@ function initRestedXpAffiliate() {
     });
 }
 
-// Initialize calculator on page load
 document.addEventListener('DOMContentLoaded', function() {
     initRestedXpAffiliate();
-    // Set initial max levels based on default selection (TBC)
     updateGameVersion();
-    calculateLeveling();
+
+    document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
+    document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
+    document.getElementById('currentXP').addEventListener('input', calculateLeveling);
+    document.getElementById('playStyle').addEventListener('change', calculateLeveling);
+    document.getElementById('pace').addEventListener('change', calculateLeveling);
 });
 
-// Auto-calculate when inputs change
-document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
-document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
-document.getElementById('currentXP').addEventListener('input', calculateLeveling);
-document.getElementById('xpBonus').addEventListener('change', calculateLeveling);
-document.getElementById('playStyle').addEventListener('change', calculateLeveling);
+// Exported for the offline rate-calibration check (see README); ignored in browsers.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { XP_TABLES, GAME_VERSIONS, PACE_MULTIPLIERS };
+}
