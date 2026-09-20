@@ -626,16 +626,20 @@ function initRestedXpAffiliate() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    initRestedXpAffiliate();
-    updateGameVersion();
+// Guarded so the offline rate-calibration check below can require this file in
+// Node, where there is no document.
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initRestedXpAffiliate();
+        updateGameVersion();
 
-    document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
-    document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
-    document.getElementById('currentXP').addEventListener('input', calculateLeveling);
-    document.getElementById('playStyle').addEventListener('change', calculateLeveling);
-    document.getElementById('pace').addEventListener('change', calculateLeveling);
-});
+        document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
+        document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
+        document.getElementById('currentXP').addEventListener('input', calculateLeveling);
+        document.getElementById('playStyle').addEventListener('change', calculateLeveling);
+        document.getElementById('pace').addEventListener('change', calculateLeveling);
+    });
+}
 
 // Exported for the offline rate-calibration check (see README); ignored in browsers.
 if (typeof module !== 'undefined' && module.exports) {

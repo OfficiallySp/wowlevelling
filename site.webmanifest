@@ -1,0 +1,16 @@
+{
+  "name": "WoW Leveling Calculator",
+  "short_name": "WoW Leveling",
+  "description": "Leveling time and XP calculator for WoW Forever, Classic Era, TBC Anniversary and MoP Classic.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "categories": ["games", "utilities"],
+  "icons": [
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

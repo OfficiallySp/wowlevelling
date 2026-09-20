@@ -51,3 +51,33 @@ Those are base numbers with no XP bonus active. MoP with heirlooms lands near th
 Rates and bonuses live in `GAME_VERSIONS` in `script.js`, one entry per version. Rate bands are `[upToLevel, xpPerHour]` at the average pace with no bonus active, and apply while your level is below `upToLevel`. Pace multipliers are in `PACE_MULTIPLIERS`.
 
 When Forever goes live, the two things most likely to need revising are the Forever `questing` and `dungeon` bands, once the size of the dungeon XP change is known.
+
+**If you change a rate band or an XP table, the article sections in `index.html` go stale.** The XP totals, per-bracket XP and hours-to-cap tables under `#how-long`, `#wow-forever`, `#classic-era`, `#tbc-anniversary` and `#mop-classic` are derived from `script.js`, not computed at runtime, and the FAQ repeats the same figures. Regenerate them with:
+
+```bash
+node -e "global.document={addEventListener(){},getElementById(){return null},querySelectorAll(){return[]}};
+const {GAME_VERSIONS,PACE_MULTIPLIERS}=require('./script.js');
+const rate=(v,s,l)=>{const b=v.rates[s]||v.rates.questing;for(const[u,r]of b)if(l<u)return r;return b[b.length-1][1]};
+for(const[id,v]of Object.entries(GAME_VERSIONS)){
+  let t=0;for(let l=1;l<v.maxLevel;l++)t+=v.xpTable[l-1];
+  console.log(id,'total',t.toLocaleString());
+  for(const s of ['questing','dungeon','mixed','pvp'])
+    console.log('  '+s,['casual','average','optimized'].map(p=>{
+      let h=0;for(let l=1;l<v.maxLevel;l++)h+=v.xpTable[l-1]/(rate(v,s,l)*PACE_MULTIPLIERS[p]);
+      return p+' '+h.toFixed(0)+'h';}).join(' | '));
+}"
+```
+
+The JSON-LD block in the `<head>` mirrors the visible FAQ word for word. If you edit one, edit the other - structured data that does not match the page is ineligible for rich results.
+
+## Search and social files
+
+| File | Purpose |
+| --- | --- |
+| `robots.txt` | Allows all crawlers, points at the sitemap, explicitly allows the AdSense crawlers. |
+| `sitemap.xml` | Single-URL sitemap with `lastmod`. Bump `lastmod` when the page content changes. |
+| `site.webmanifest` | Install metadata and the PWA icon set. |
+| `favicon.svg`, `apple-touch-icon.png`, `assets/favicon-96x96.png` | Real icon files. Google will not show a favicon in search results for a data-URI icon. |
+| `assets/og-image.png` | 1200x630 social card used by `og:image` and `twitter:image`. |
+
+The icons and the social card are rendered from `favicon.svg` and a small HTML template with headless Edge, so they can be regenerated at any size without an image editor.
