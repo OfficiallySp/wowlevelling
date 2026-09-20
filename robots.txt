@@ -1,0 +1,12 @@
+# https://wowlevelling.officiallysp.net/
+User-agent: *
+Allow: /
+
+# Ad-network crawlers need the page to read it for contextual targeting.
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+Sitemap: https://wowlevelling.officiallysp.net/sitemap.xml
