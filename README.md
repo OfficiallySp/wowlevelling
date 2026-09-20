@@ -46,38 +46,97 @@ XP/hour rates are calibrated so a full run at each pace lands inside the complet
 
 Those are base numbers with no XP bonus active. MoP with heirlooms lands near the commonly reported 25 hours for a prepared player, and MoP 85-90 alone comes out around 8-9 hours.
 
-## Updating the rates
+## Site structure
 
-Rates and bonuses live in `GAME_VERSIONS` in `script.js`, one entry per version. Rate bands are `[upToLevel, xpPerHour]` at the average pace with no bonus active, and apply while your level is below `upToLevel`. Pace multipliers are in `PACE_MULTIPLIERS`.
+Every page is generated. **Do not hand-edit the HTML** - edit `tools/build-pages.js` and re-run it.
 
-When Forever goes live, the two things most likely to need revising are the Forever `questing` and `dungeon` bands, once the size of the dungeon XP change is known.
+| URL | File | Targets |
+| --- | --- | --- |
+| `/` | `index.html` | Comparison of all four versions, XP bonuses, methodology, general FAQ |
+| `/wow-forever/` | `wow-forever/index.html` | WoW Forever 1-60 |
+| `/classic-era/` | `classic-era/index.html` | Classic Era and Hardcore 1-60 |
+| `/tbc-anniversary/` | `tbc-anniversary/index.html` | TBC Anniversary 1-70 |
+| `/mop-classic/` | `mop-classic/index.html` | MoP Classic 1-90 |
 
-**If you change a rate band or an XP table, the article sections in `index.html` go stale.** The XP totals, per-bracket XP and hours-to-cap tables under `#how-long`, `#wow-forever`, `#classic-era`, `#tbc-anniversary` and `#mop-classic` are derived from `script.js`, not computed at runtime, and the FAQ repeats the same figures. Regenerate them with:
+Each version page carries its own title, description, canonical URL, social card and
+FAQ, plus a full per-level XP table and the zone route by bracket. The hub page links
+to all four and each version page links back, so the set is fully crawlable from any
+entry point.
 
 ```bash
-node -e "global.document={addEventListener(){},getElementById(){return null},querySelectorAll(){return[]}};
-const {GAME_VERSIONS,PACE_MULTIPLIERS}=require('./script.js');
-const rate=(v,s,l)=>{const b=v.rates[s]||v.rates.questing;for(const[u,r]of b)if(l<u)return r;return b[b.length-1][1]};
-for(const[id,v]of Object.entries(GAME_VERSIONS)){
-  let t=0;for(let l=1;l<v.maxLevel;l++)t+=v.xpTable[l-1];
-  console.log(id,'total',t.toLocaleString());
-  for(const s of ['questing','dungeon','mixed','pvp'])
-    console.log('  '+s,['casual','average','optimized'].map(p=>{
-      let h=0;for(let l=1;l<v.maxLevel;l++)h+=v.xpTable[l-1]/(rate(v,s,l)*PACE_MULTIPLIERS[p]);
-      return p+' '+h.toFixed(0)+'h';}).join(' | '));
-}"
+node tools/build-pages.js   # rewrites all five pages and sitemap.xml
 ```
 
-The JSON-LD block in the `<head>` mirrors the visible FAQ word for word. If you edit one, edit the other - structured data that does not match the page is ineligible for rich results.
+The generator computes every XP total, bracket table and hours-to-cap figure from
+`script.js`, so the prose cannot drift from the calculator. It also stamps
+`styles.css?v=<hash>` and `script.js?v=<hash>` into each page, which is what makes the
+one-year immutable cache in `netlify.toml` safe - **re-run it after editing either
+file**, or visitors keep the old copy.
+
+The version picker behaves differently per page: on `/` it switches in place, on a
+version page it navigates to that version's page, carrying your current settings.
+
+## Shareable result links
+
+The calculator mirrors its state into the query string as you change it, so a pasted
+link opens the way the sender left it. Values matching the version's defaults are
+omitted, and `history.replaceState` is used so the back button leaves the page rather
+than walking through every keystroke.
+
+| Parameter | Values | Default |
+| --- | --- | --- |
+| `v` | `forever`, `classic`, `tbc`, `mop` | `forever` (hub page only - version pages carry it in the path) |
+| `from` | current level | `1` |
+| `to` | target level | the version's cap |
+| `xp` | XP already earned in the current level | `0` |
+| `style` | `questing`, `dungeon`, `mixed`, `pvp` | `questing` |
+| `pace` | `casual`, `average`, `optimized` | `average` |
+| `bonus` | comma-separated bonus ids, e.g. `rested,heirlooms` | none |
+
+Example: `/mop-classic/?from=85&style=dungeon&pace=optimized&bonus=rested,heirlooms`
+
+Unknown or out-of-range values are clamped or ignored rather than trusted, and every
+page has a canonical tag pointing at its bare path, so parameter variants never
+compete with it in search results.
+
+## Updating the rates
+
+Rates and bonuses live in `GAME_VERSIONS` in `script.js`, one entry per version. Rate
+bands are `[upToLevel, xpPerHour]` at the average pace with no bonus active, and apply
+while your level is below `upToLevel`. Pace multipliers are in `PACE_MULTIPLIERS`.
+
+When Forever goes live, the two things most likely to need revising are the Forever
+`questing` and `dungeon` bands, once the size of the dungeon XP change is known.
+
+After any change to `XP_TABLES`, `GAME_VERSIONS` or `PACE_MULTIPLIERS`, run
+`node tools/build-pages.js`. Everything in the article sections and the FAQ is derived,
+so that one command brings the whole site back into step. The JSON-LD FAQ blocks are
+generated from the same source as the visible FAQ text, so they cannot fall out of
+sync - structured data that does not match the page is ineligible for rich results.
+
+## Hosting
+
+Netlify, project `wowlevelling`, served as static files from the repo root with no
+build command - which is why generated pages are committed rather than built on deploy.
+
+`netlify.toml` carries response headers only; build and publish settings stay in the
+Netlify UI. Caching is split by how the file is versioned:
+
+| Path | Cache-Control | Why |
+| --- | --- | --- |
+| HTML (`/*`) | `max-age=0, must-revalidate` | A cached page would serve stale numbers after a deploy |
+| `/styles.css`, `/script.js` | `max-age=31536000, immutable` | Safe only because of the `?v=<hash>` stamp |
+| `/assets/*`, `/rxpassets/*`, icons | `max-age=2592000` | No cache busting on these names, so 30 days |
+| `/sitemap.xml`, `/robots.txt` | `max-age=3600` | Crawler-facing, changes with the content |
 
 ## Search and social files
 
 | File | Purpose |
 | --- | --- |
 | `robots.txt` | Allows all crawlers, points at the sitemap, explicitly allows the AdSense crawlers. |
-| `sitemap.xml` | Single-URL sitemap with `lastmod`. Bump `lastmod` when the page content changes. |
+| `sitemap.xml` | Generated. One entry per page with `lastmod` and its social card. |
 | `site.webmanifest` | Install metadata and the PWA icon set. |
 | `favicon.svg`, `apple-touch-icon.png`, `assets/favicon-96x96.png` | Real icon files. Google will not show a favicon in search results for a data-URI icon. |
-| `assets/og-image.png` | 1200x630 social card used by `og:image` and `twitter:image`. |
+| `assets/og-image.png` | 1200x630 social card for the hub page. |
+| `assets/og-<slug>.png` | Per-version social cards, each with that version's levels, XP total and questing time. |
 
-The icons and the social card are rendered from `favicon.svg` and a small HTML template with headless Edge, so they can be regenerated at any size without an image editor.

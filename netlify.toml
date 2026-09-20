@@ -1,0 +1,68 @@
+# Netlify configuration for wowlevelling.officiallysp.net
+#
+# There is no build step - the repo is served as static files - so this file only
+# carries response headers. Build and publish settings stay in the Netlify UI.
+
+# HTML must revalidate, otherwise a cached page keeps serving old numbers after a
+# deploy. This is Netlify's default for HTML; it is spelled out so it survives a
+# future catch-all rule.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+
+# styles.css and script.js are requested with a ?v=<hash> query string written by
+# tools/build-pages.js, so the URL changes whenever the file does. That is what
+# makes a one-year immutable cache safe here.
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/script.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Icons and social cards. No cache busting on these filenames, so 30 days rather
+# than a year - long enough to matter, short enough that replacing a social card
+# goes live in a reasonable window.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/rxpassets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/favicon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/apple-touch-icon.png"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# Crawler-facing files change with the content, so keep them short.
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

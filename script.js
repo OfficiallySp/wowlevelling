@@ -557,6 +557,10 @@ function calculateLeveling() {
     document.getElementById('progressFill').style.width = `${progressPercent}%`;
 
     updateZoneRecommendations(currentLevel, targetLevel);
+
+    // Every input path ends up here, so this is the one place the shareable URL
+    // needs keeping in step.
+    syncUrl();
 }
 
 function updateZoneRecommendations(currentLevel, targetLevel) {
@@ -598,6 +602,169 @@ function updateZoneRecommendations(currentLevel, targetLevel) {
     });
 }
 
+// -----------------------------------------------------------------------------
+// Shareable state
+// -----------------------------------------------------------------------------
+// The inputs are mirrored into the query string as you change them, so a result
+// pasted into Discord or Reddit opens the way the sender left it. Values that
+// match the selected version's defaults are left out, which keeps a plain visit
+// on a clean URL. Every page carries a canonical tag pointing at its bare path,
+// so the parameter variants never compete with it in search results.
+
+const VERSION_PAGE_PATHS = {
+    forever: '/wow-forever/',
+    classic: '/classic-era/',
+    tbc: '/tbc-anniversary/',
+    mop: '/mop-classic/'
+};
+
+const PLAY_STYLES = ['questing', 'dungeon', 'mixed', 'pvp'];
+
+// Set by the generator on the per-version pages, absent on the hub page. On the
+// hub the version picker switches in place; on a version page it navigates.
+function pinnedVersionId() {
+    return (document.body && document.body.dataset.version) || null;
+}
+
+function selectedVersionId() {
+    return document.getElementById('gameVersion').value;
+}
+
+function currentState() {
+    const version = getVersion();
+    return {
+        version: selectedVersionId(),
+        from: parseInt(document.getElementById('currentLevel').value, 10) || 1,
+        to: parseInt(document.getElementById('targetLevel').value, 10) || version.maxLevel,
+        xp: parseInt(document.getElementById('currentXP').value, 10) || 0,
+        style: document.getElementById('playStyle').value,
+        pace: document.getElementById('pace').value,
+        bonuses: Array.from(document.querySelectorAll('.xp-bonus-option input:checked'))
+            .map(input => input.dataset.bonusId)
+    };
+}
+
+// `versionId` is the version the link will open, which is not always the one
+// currently selected - switching version on a version page builds a link for the
+// destination before navigating.
+function stateParams(state, versionId) {
+    const version = GAME_VERSIONS[versionId] || GAME_VERSIONS.forever;
+    const params = new URLSearchParams();
+
+    if (!pinnedVersionId() && state.version !== 'forever') params.set('v', state.version);
+    if (state.from !== 1) params.set('from', state.from);
+    if (state.to !== version.maxLevel) params.set('to', state.to);
+    if (state.xp > 0) params.set('xp', state.xp);
+    if (state.style !== 'questing') params.set('style', state.style);
+    if (state.pace !== 'average') params.set('pace', state.pace);
+    if (state.bonuses.length) params.set('bonus', state.bonuses.join(','));
+
+    return params;
+}
+
+// replaceState rather than pushState: the back button should leave the page, not
+// walk back through every keystroke in the level fields.
+function syncUrl() {
+    if (!window.history || !window.history.replaceState) return;
+    const query = stateParams(currentState(), selectedVersionId()).toString();
+    history.replaceState(null, '', query ? '?' + query : window.location.pathname);
+}
+
+function applyUrlState() {
+    // Read before anything else: updateGameVersion() below triggers a syncUrl
+    // that would overwrite the query string we are restoring from.
+    const params = new URLSearchParams(window.location.search);
+    const pinned = pinnedVersionId();
+
+    const requested = pinned || params.get('v');
+    if (requested && GAME_VERSIONS[requested]) {
+        document.getElementById('gameVersion').value = requested;
+    }
+
+    // Sets the level bounds and renders this version's bonus checkboxes.
+    updateGameVersion();
+
+    const version = getVersion();
+    const clamp = function (raw, min, max, fallback) {
+        const value = parseInt(raw, 10);
+        if (!Number.isFinite(value)) return fallback;
+        return Math.min(max, Math.max(min, value));
+    };
+
+    const target = clamp(params.get('to'), 2, version.maxLevel, version.maxLevel);
+    document.getElementById('targetLevel').value = target;
+    document.getElementById('currentLevel').value = clamp(params.get('from'), 1, target - 1, 1);
+    document.getElementById('currentXP').value = clamp(params.get('xp'), 0, Number.MAX_SAFE_INTEGER, 0);
+
+    const style = params.get('style');
+    if (PLAY_STYLES.indexOf(style) !== -1) document.getElementById('playStyle').value = style;
+
+    const pace = params.get('pace');
+    if (Object.prototype.hasOwnProperty.call(PACE_MULTIPLIERS, pace)) {
+        document.getElementById('pace').value = pace;
+    }
+
+    const wanted = (params.get('bonus') || '').split(',').filter(Boolean);
+    document.querySelectorAll('.xp-bonus-option input').forEach(function (input) {
+        input.checked = wanted.indexOf(input.dataset.bonusId) !== -1;
+    });
+    // Rested and "always rested" are the same buff at different intensities, so a
+    // hand-edited link asking for both keeps only the lighter one.
+    const rested = document.querySelector('.xp-bonus-option input[data-bonus-id="rested"]');
+    const restedHeavy = document.querySelector('.xp-bonus-option input[data-bonus-id="restedHeavy"]');
+    if (rested && restedHeavy && rested.checked && restedHeavy.checked) restedHeavy.checked = false;
+
+    calculateLeveling();
+}
+
+function onVersionSelect() {
+    const versionId = selectedVersionId();
+    const pinned = pinnedVersionId();
+
+    if (!pinned) {
+        updateGameVersion();
+        return;
+    }
+
+    const previous = GAME_VERSIONS[pinned];
+    const next = GAME_VERSIONS[versionId];
+    const state = currentState();
+
+    // Mirror the in-place behaviour: a target parked at the old cap follows the
+    // new one, anything else is carried across and clamped.
+    if (state.to === previous.maxLevel) state.to = next.maxLevel;
+    state.to = Math.min(state.to, next.maxLevel);
+    state.from = Math.min(state.from, state.to - 1);
+
+    const query = stateParams(state, versionId).toString();
+    window.location.href = VERSION_PAGE_PATHS[versionId] + (query ? '?' + query : '');
+}
+
+function initCopyLink() {
+    const button = document.getElementById('copyLinkBtn');
+    if (!button) return;
+
+    button.addEventListener('click', async function () {
+        syncUrl();
+        const originalLabel = button.textContent;
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+        } catch {
+            // The clipboard API needs a secure context; fall back to a selection.
+            const field = document.createElement('input');
+            field.value = window.location.href;
+            document.body.appendChild(field);
+            field.select();
+            document.execCommand('copy');
+            field.remove();
+        }
+        button.textContent = 'Link copied!';
+        setTimeout(function () {
+            button.textContent = originalLabel;
+        }, 2000);
+    });
+}
+
 const RXP_DISCOUNT_CODE = 'FGJCV0TO7U';
 
 function initRestedXpAffiliate() {
@@ -631,7 +798,8 @@ function initRestedXpAffiliate() {
 if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function() {
         initRestedXpAffiliate();
-        updateGameVersion();
+        initCopyLink();
+        applyUrlState();
 
         document.getElementById('currentLevel').addEventListener('input', calculateLeveling);
         document.getElementById('targetLevel').addEventListener('input', calculateLeveling);
