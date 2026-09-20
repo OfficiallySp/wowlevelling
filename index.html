@@ -3,115 +3,249 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
 
     <!-- Primary Meta Tags -->
-    <title>
-      WoW Leveling Calculator - Forever, Classic Era, TBC Anniversary & MoP
-      Classic
-    </title>
-    <meta
-      name="title"
-      content="WoW Leveling Calculator - Forever, Classic Era, TBC Anniversary & MoP Classic"
-    />
+    <title>WoW Leveling Calculator - Forever, Classic Era, TBC &amp; MoP</title>
     <meta
       name="description"
-      content="Leveling time calculator for WoW Forever (Classic+), Classic Era, TBC Anniversary and MoP Classic. Verified XP tables, per-level XP/hour rates, bonuses and zone guides."
-    />
-    <meta
-      name="keywords"
-      content="WoW Forever, Warcraft Forever, Classic Plus, WoW Classic, Classic Era, TBC Anniversary, MoP Classic, Mists of Pandaria Classic, leveling calculator, XP calculator, leveling time, rested XP, heirloom bonus, leveling guide, zones, 1-60, 1-70, 1-90"
+      content="Free leveling time and XP calculator for WoW Forever, Classic Era, TBC Anniversary and MoP Classic. Verified XP tables, XP/hour rates and zone routes."
     />
     <meta name="author" content="OfficiallySp" />
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
-    <meta name="revisit-after" content="7 days" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://wowlevelling.officiallysp.net/" />
+
+    <!-- Warm up the third-party connections the page actually makes -->
+    <link rel="preconnect" href="https://officiallysp.net" crossorigin />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+    <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://wowlevelling.officiallysp.net/" />
     <meta
       property="og:title"
-      content="WoW Leveling Calculator - Forever, Classic Era, TBC & MoP Classic"
+      content="WoW Leveling Calculator - Forever, Classic Era, TBC &amp; MoP Classic"
     />
     <meta
       property="og:description"
       content="Work out your leveling time in WoW Forever, Classic Era, TBC Anniversary or MoP Classic. Verified XP tables, realistic XP/hour rates and zone guides."
     />
-    <meta property="og:image" content="https://wowlevelling.officiallysp.net/og-image.jpg" />
+    <meta
+      property="og:image"
+      content="https://wowlevelling.officiallysp.net/assets/og-image.png"
+    />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="WoW Leveling Calculator - Forever, Classic Era, TBC & MoP Classic"
+      content="WoW Leveling Calculator - Forever, Classic Era, TBC and MoP Classic"
     />
-    <meta property="og:site_name" content="WoW Classic Leveling Calculator" />
+    <meta property="og:site_name" content="WoW Leveling Calculator" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:updated_time" content="2026-09-20T00:00:00+00:00" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://wowlevelling.officiallysp.net/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://wowlevelling.officiallysp.net/" />
     <meta
-      property="twitter:title"
-      content="WoW Leveling Calculator - Forever, Classic Era, TBC & MoP Classic"
+      name="twitter:title"
+      content="WoW Leveling Calculator - Forever, Classic Era, TBC &amp; MoP Classic"
     />
     <meta
-      property="twitter:description"
+      name="twitter:description"
       content="Leveling time and XP requirements for WoW Forever, Classic Era, TBC Anniversary and MoP Classic, with per-level XP/hour rates."
     />
     <meta
-      property="twitter:image"
-      content="https://wowlevelling.officiallysp.net/og-image.jpg"
+      name="twitter:image"
+      content="https://wowlevelling.officiallysp.net/assets/og-image.png"
     />
     <meta
-      property="twitter:image:alt"
-      content="WoW Leveling Calculator - Forever, Classic Era, TBC & MoP Classic"
+      name="twitter:image:alt"
+      content="WoW Leveling Calculator - Forever, Classic Era, TBC and MoP Classic"
     />
 
+    <!-- Icons. Google needs a crawlable favicon URL to show an icon in search
+         results, so these are real files rather than the old inline data URI. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/favicon-96x96.png" sizes="96x96" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+
     <!-- Additional Meta Tags -->
-    <meta name="theme-color" content="#1a1a1a" />
-    <meta name="msapplication-navbutton-color" content="#1a1a1a" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://wowlevelling.officiallysp.net/" />
-
-    <!-- Favicon - using data URI for default icon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔</text></svg>" />
-
-    <!-- Structured Data -->
+    <!-- Structured Data. The Question entries mirror the visible FAQ section word
+         for word - if you edit one, edit the other, or the markup stops matching
+         the page and becomes ineligible for rich results. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "WoW Leveling Calculator",
-        "description": "Leveling time and XP calculator for WoW Forever, Classic Era, TBC Anniversary and MoP Classic",
-        "url": "https://wowlevelling.officiallysp.net/",
-        "author": {
-          "@type": "Person",
-          "name": "OfficiallySp",
-          "url": "https://officiallysp.net"
-        },
-        "applicationCategory": "Game",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "featureList": [
-          "WoW Forever (Classic+) leveling estimates for levels 1-60",
-          "Classic Era, TBC Anniversary and MoP Classic XP tables",
-          "Per-level XP per hour rates by play style and pace",
-          "Rested, heirloom, guild and Joyous Journeys bonuses",
-          "Zone recommendations per expansion"
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://officiallysp.net/#person",
+            "name": "OfficiallySp",
+            "url": "https://officiallysp.net"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://wowlevelling.officiallysp.net/#website",
+            "url": "https://wowlevelling.officiallysp.net/",
+            "name": "WoW Leveling Calculator",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://officiallysp.net/#person" }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://wowlevelling.officiallysp.net/#app",
+            "name": "WoW Leveling Calculator",
+            "url": "https://wowlevelling.officiallysp.net/",
+            "description": "Leveling time and XP calculator for WoW Forever, Classic Era, TBC Anniversary and MoP Classic",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Web Browser",
+            "browserRequirements": "Requires JavaScript",
+            "inLanguage": "en",
+            "isAccessibleForFree": true,
+            "dateModified": "2026-09-20",
+            "author": { "@id": "https://officiallysp.net/#person" },
+            "screenshot": "https://wowlevelling.officiallysp.net/assets/og-image.png",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "WoW Forever (Classic+) leveling estimates for levels 1-60",
+              "Classic Era, TBC Anniversary and MoP Classic XP tables",
+              "Per-level XP per hour rates by play style and pace",
+              "Rested, heirloom, guild and Joyous Journeys bonuses",
+              "Zone recommendations per expansion"
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://wowlevelling.officiallysp.net/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "OfficiallySp",
+                "item": "https://officiallysp.net"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "WoW Leveling Calculator"
+              }
+            ]
+          },
+          {
+            "@type": ["WebPage", "FAQPage"],
+            "@id": "https://wowlevelling.officiallysp.net/#webpage",
+            "url": "https://wowlevelling.officiallysp.net/",
+            "name": "WoW Leveling Calculator - Forever, Classic Era, TBC & MoP",
+            "description": "Free leveling time and XP calculator for WoW Forever, Classic Era, TBC Anniversary and MoP Classic.",
+            "isPartOf": { "@id": "https://wowlevelling.officiallysp.net/#website" },
+            "breadcrumb": { "@id": "https://wowlevelling.officiallysp.net/#breadcrumb" },
+            "primaryImageOfPage": "https://wowlevelling.officiallysp.net/assets/og-image.png",
+            "inLanguage": "en",
+            "datePublished": "2026-06-04",
+            "dateModified": "2026-09-20",
+            "author": { "@id": "https://officiallysp.net/#person" },
+            "about": {
+              "@type": "VideoGame",
+              "name": "World of Warcraft Classic",
+              "publisher": { "@type": "Organization", "name": "Blizzard Entertainment" }
+            },
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How long does it take to level 1-60 in WoW Classic Era?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Levels 1 to 60 need 4,084,700 XP on the original 1.12 curve. Questing with no XP bonus, this calculator puts a first-time casual run at roughly 118 hours, an average run at roughly 71 hours, and an optimized run with a guide addon and a tight route at roughly 44 hours."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long will 1-60 take in WoW Forever?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The 1-60 XP curve in WoW Forever is unchanged from Classic, so it is still 4,084,700 XP. Because dungeon mob XP is cut and dungeon quest XP is raised, questing is meant to be the fastest route: roughly 103 hours casual, 62 hours average and 39 hours optimized. These are pre-launch estimates and will be revised once live data lands."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much XP do you need to reach level 60?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "4,084,700 XP in Classic Era and WoW Forever, which both use the vanilla 1.12 curve. In TBC Anniversary the post-2.3 curve cuts levels 11-59, so 1-60 is 3,379,400 XP. Levels 50-60 alone are 1,778,600 XP, about 44 percent of the whole vanilla run."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does 1-70 take in TBC Anniversary?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "1-70 is 10,141,700 XP, and Outland from 60 to 70 is 6,762,300 of that, about 67 percent. Questing with no XP bonus lands near 90 hours casual, 54 hours average and 34 hours optimized, because Outland quest XP per hour is several times higher than Azeroth's."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does 1-90 take in MoP Classic?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "1-90 is 95,883,400 XP, of which 64,990,000 is levels 85-90 alone. Questing with no XP bonus is roughly 54 hours casual, 32 hours average and 20 hours optimized. With heirlooms and rested a prepared player lands nearer the commonly reported 25 hours, and 85-90 on its own is about 8-9 hours."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does rested XP make leveling faster?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, but it changes how fast you earn XP, never how much a level costs. Rested doubles the XP you get from killing mobs while the bonus lasts, which works out to roughly +15 percent over a normal play session, or nearer +30 percent if you only play an alt in short sessions and log out in an inn. Pick the matching bonus checkbox and the estimate drops accordingly."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is dungeon grinding faster than questing?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It depends on the version. In Classic Era dungeon spam is slower overall than questing, around 81 hours versus 71 at an average pace, though it is strong in specific brackets. In MoP Classic dungeons are the fastest single route at roughly 28 hours. In WoW Forever dungeon mob XP is reduced on purpose, so questing wins clearly."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do heirlooms work in Classic Era and WoW Forever?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Heirlooms do not exist in Classic Era, Hardcore or WoW Forever, so the only XP bonus available there is rested. MoP Classic has heirloom chest and shoulders for +20 percent combined, plus the guild perk Fast Track for another +10 percent."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the Joyous Journeys XP buff still active?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not right now. The +50 percent Joyous Journeys buff ran in MoP Classic from 21 April 2026 until Siege of Orgrimmar released in early June 2026. The checkbox is still in the calculator so you can model what happens if Blizzard turns it back on."
+                }
+              }
+            ]
+          }
         ]
       }
     </script>
+
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548903334937961"
@@ -119,14 +253,30 @@
     ></script>
     <link rel="stylesheet" href="https://officiallysp.net/assets/css/design-tokens.css" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
   </head>
   <body>
     <a href="https://officiallysp.net" class="officiallysp-bar" aria-label="Part of OfficiallySp - More projects" style="--os-accent: #ffd700;">
       <span class="os-icon">◀</span><span class="os-accent">OfficiallySp.net</span><span>- More projects</span>
     </a>
     <div class="container">
-      <h1>WoW Leveling Calculator</h1>
-      
+      <header class="page-header">
+        <h1>WoW Leveling Calculator</h1>
+        <p class="page-intro">
+          Work out how long leveling will take in <strong>WoW Forever</strong>,
+          <strong>Classic Era</strong>, <strong>TBC Anniversary</strong> and
+          <strong>MoP Classic</strong>. Pick your version, current level and target
+          level, and the calculator walks the XP table level by level using XP/hour
+          rates calibrated to the completion times players report in each version.
+        </p>
+        <p class="byline">
+          Made by
+          <a href="https://officiallysp.net" target="_blank" rel="noopener noreferrer">OfficiallySp</a>
+          &middot; XP tables verified
+          <time datetime="2026-09-19">19 September 2026</time>
+        </p>
+      </header>
+
       <!-- RestedXP affiliate -->
       <section class="rxp-hero" aria-label="RestedXP premium leveling guides">
         <a
@@ -142,6 +292,8 @@
             width="728"
             height="90"
             loading="eager"
+            fetchpriority="high"
+            decoding="async"
           />
         </a>
         <div class="rxp-code-strip">
@@ -160,199 +312,692 @@
         </div>
       </section>
 
-      <div class="input-group version-picker">
-        <label for="gameVersion">Game Version</label>
-        <select id="gameVersion" onchange="updateGameVersion()">
-          <option value="forever" selected>WoW Forever (1-60)</option>
-          <option value="classic">Classic Era (1-60)</option>
-          <option value="tbc">TBC Anniversary (1-70)</option>
-          <option value="mop">MoP Classic (1-90)</option>
-        </select>
-      </div>
-      <p class="version-note" id="versionNote"></p>
-      <p style="text-align: center; color: #cccccc; margin-bottom: 30px">
-        Made by <a href="https://officiallysp.net" target="_blank" rel="noopener noreferrer">OfficiallySp</a>
-      </p>
+      <main>
+        <section class="calculator-section" aria-labelledby="calculator-heading">
+          <h2 id="calculator-heading" class="visually-hidden">
+            Leveling time calculator
+          </h2>
 
-      <div class="calculator-layout">
-        <div class="calculator-main">
-      <div class="calculator-grid">
-        <div class="input-section">
-          <h3 style="color: #ffd700; margin-bottom: 20px">
-            Character Information
-          </h3>
-
-          <div class="input-group">
-            <label for="currentLevel">Current Level:</label>
-            <input type="number" id="currentLevel" min="1" max="59" value="1" />
-          </div>
-
-          <div class="input-group">
-            <label for="targetLevel">Target Level:</label>
-            <input type="number" id="targetLevel" min="2" max="60" value="60" />
-          </div>
-
-          <div class="input-group">
-            <label for="currentXP">Current XP in Level:</label>
-            <input type="number" id="currentXP" min="0" value="0" />
-          </div>
-
-          <div class="input-group">
-            <label>XP Bonuses:</label>
-            <div class="xp-bonus-list" id="xpBonuses"></div>
-          </div>
-
-          <div class="input-group">
-            <label for="playStyle">Play Style:</label>
-            <select id="playStyle">
-              <option value="questing">Questing</option>
-              <option value="dungeon">Dungeon Grinding</option>
-              <option value="mixed">Mixed (Questing + Dungeons)</option>
-              <option value="pvp">PvP</option>
+          <div class="input-group version-picker">
+            <label for="gameVersion">Game Version</label>
+            <select id="gameVersion" onchange="updateGameVersion()">
+              <option value="forever" selected>WoW Forever (1-60)</option>
+              <option value="classic">Classic Era (1-60)</option>
+              <option value="tbc">TBC Anniversary (1-70)</option>
+              <option value="mop">MoP Classic (1-90)</option>
             </select>
           </div>
+          <p class="version-note" id="versionNote"></p>
 
-          <div class="input-group">
-            <label for="pace">Pace:</label>
-            <select id="pace">
-              <option value="casual">Casual - first time through, no guide</option>
-              <option value="average" selected>Average - decent route, some downtime</option>
-              <option value="optimized">Optimized - guide addon, tight route</option>
-            </select>
-          </div>
+          <div class="calculator-layout">
+            <div class="calculator-main">
+              <div class="calculator-grid">
+                <div class="input-section">
+                  <h3>Character Information</h3>
 
-          <button class="btn" onclick="calculateLeveling()">Refresh</button>
+                  <div class="input-group">
+                    <label for="currentLevel">Current Level:</label>
+                    <input type="number" id="currentLevel" min="1" max="59" value="1" />
+                  </div>
 
-          <div class="rxp-medium-promo">
-            <a
-              class="rxp-medium-link"
-              href="https://shop.restedxp.com/ref/officiallysp/"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              title="RestedXP premium leveling guides - 10% off"
-            >
-              <img
-                src="rxpassets/square-affiliate-banner-1.png"
-                alt="RestedXP premium leveling guides - get 10% off. Click to shop."
-                width="300"
-                height="300"
-                loading="lazy"
-              />
-            </a>
-          </div>
-        </div>
+                  <div class="input-group">
+                    <label for="targetLevel">Target Level:</label>
+                    <input type="number" id="targetLevel" min="2" max="60" value="60" />
+                  </div>
 
-        <div class="results-section">
-          <h3 style="color: #ffd700; margin-bottom: 20px">
-            Leveling Statistics
-          </h3>
+                  <div class="input-group">
+                    <label for="currentXP">Current XP in Level:</label>
+                    <input type="number" id="currentXP" min="0" value="0" />
+                  </div>
 
-          <div class="result-item">
-            <div class="result-label">Total XP Needed:</div>
-            <div class="result-value" id="totalXP">-</div>
-          </div>
+                  <fieldset class="input-group bonus-fieldset">
+                    <legend>XP Bonuses:</legend>
+                    <div class="xp-bonus-list" id="xpBonuses"></div>
+                  </fieldset>
 
-          <div class="result-item">
-            <div class="result-label">Estimated Time:</div>
-            <div class="result-value" id="estimatedTime">-</div>
-          </div>
+                  <div class="input-group">
+                    <label for="playStyle">Play Style:</label>
+                    <select id="playStyle">
+                      <option value="questing">Questing</option>
+                      <option value="dungeon">Dungeon Grinding</option>
+                      <option value="mixed">Mixed (Questing + Dungeons)</option>
+                      <option value="pvp">PvP</option>
+                    </select>
+                  </div>
 
-          <div class="result-item">
-            <div class="result-label">Average XP per Hour:</div>
-            <div class="result-value" id="xpPerHour">-</div>
-          </div>
+                  <div class="input-group">
+                    <label for="pace">Pace:</label>
+                    <select id="pace">
+                      <option value="casual">Casual - first time through, no guide</option>
+                      <option value="average" selected>Average - decent route, some downtime</option>
+                      <option value="optimized">Optimized - guide addon, tight route</option>
+                    </select>
+                  </div>
 
-          <div class="result-item">
-            <div class="result-label">Active XP Bonus:</div>
-            <div class="result-value" id="activeBonus">None</div>
-          </div>
+                  <button class="btn" onclick="calculateLeveling()">Refresh</button>
 
-          <div class="result-item">
-            <div class="result-label">Current Level Progress:</div>
-            <div class="result-value" id="levelProgress">-</div>
-            <div class="progress-bar">
-              <div
-                class="progress-fill"
-                id="progressFill"
-                style="width: 0%"
-              ></div>
+                  <div class="rxp-medium-promo">
+                    <a
+                      class="rxp-medium-link"
+                      href="https://shop.restedxp.com/ref/officiallysp/"
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      title="RestedXP premium leveling guides - 10% off"
+                    >
+                      <img
+                        src="rxpassets/square-affiliate-banner-1.png"
+                        alt="RestedXP premium leveling guides - get 10% off. Click to shop."
+                        width="300"
+                        height="300"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </a>
+                  </div>
+                </div>
+
+                <div class="results-section">
+                  <h3>Leveling Statistics</h3>
+
+                  <div class="result-item">
+                    <div class="result-label">Total XP Needed:</div>
+                    <div class="result-value" id="totalXP">-</div>
+                  </div>
+
+                  <div class="result-item">
+                    <div class="result-label">Estimated Time:</div>
+                    <div class="result-value" id="estimatedTime">-</div>
+                  </div>
+
+                  <div class="result-item">
+                    <div class="result-label">Average XP per Hour:</div>
+                    <div class="result-value" id="xpPerHour">-</div>
+                  </div>
+
+                  <div class="result-item">
+                    <div class="result-label">Active XP Bonus:</div>
+                    <div class="result-value" id="activeBonus">None</div>
+                  </div>
+
+                  <div class="result-item">
+                    <div class="result-label">Current Level Progress:</div>
+                    <div class="result-value" id="levelProgress">-</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                  </div>
+
+                  <div class="result-item">
+                    <div class="result-label">Levels Remaining:</div>
+                    <div class="result-value" id="levelsRemaining">-</div>
+                  </div>
+
+                  <p class="data-note">
+                    ✨ XP tables verified 19 September 2026 against
+                    <a href="https://warcraft.wiki.gg/wiki/Experience_to_level" target="_blank" rel="noopener noreferrer">Warcraft Wiki</a>.
+                    XP/hour rates are calibrated to reported completion times per version.
+                  </p>
+
+                  <div class="rxp-medium-promo">
+                    <a
+                      class="rxp-medium-link"
+                      href="https://shop.restedxp.com/ref/officiallysp/"
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      title="RestedXP premium leveling guides - 10% off"
+                    >
+                      <img
+                        src="rxpassets/affiliate-banner-2.png"
+                        alt="RestedXP premium leveling guides - get 10% off. Click to shop."
+                        width="300"
+                        height="300"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </a>
+                  </div>
+                </div>
+
+                <div class="zone-recommendations">
+                  <h3>Zones for your level range</h3>
+                  <div class="zone-list" id="zoneList">
+                    <!-- Zone recommendations will be populated here -->
+                  </div>
+                </div>
+              </div>
+
+              <nav class="toc" aria-labelledby="toc-heading">
+                <h2 class="toc-heading" id="toc-heading">On this page</h2>
+                <ul>
+                  <li><a href="#how-long">How long leveling takes</a></li>
+                  <li><a href="#wow-forever">WoW Forever 1-60</a></li>
+                  <li><a href="#classic-era">Classic Era 1-60</a></li>
+                  <li><a href="#tbc-anniversary">TBC Anniversary 1-70</a></li>
+                  <li><a href="#mop-classic">MoP Classic 1-90</a></li>
+                  <li><a href="#xp-bonuses">XP bonuses</a></li>
+                  <li><a href="#methodology">How the numbers work</a></li>
+                  <li><a href="#faq">FAQ</a></li>
+                </ul>
+              </nav>
+
+              <div class="content-sections">
+                <section id="how-long" class="content-section">
+                  <h2>How long does it take to level in WoW Classic?</h2>
+                  <p>
+                    Every live version of WoW Classic runs a different XP curve and pays
+                    XP at a different rate, so "how long does leveling take" has four
+                    separate answers. The table below is a full run to each version's
+                    level cap by questing, with no XP bonus active - the same numbers the
+                    calculator above produces when you leave the bonus boxes unticked.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>Time to reach the level cap by questing, no XP bonus active</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Version</th>
+                          <th scope="col">Levels</th>
+                          <th scope="col">Total XP</th>
+                          <th scope="col">Casual</th>
+                          <th scope="col">Average</th>
+                          <th scope="col">Optimized</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">WoW Forever</th>
+                          <td>1-60</td>
+                          <td>4,084,700</td>
+                          <td>~103 h</td>
+                          <td>~62 h</td>
+                          <td>~39 h</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Classic Era</th>
+                          <td>1-60</td>
+                          <td>4,084,700</td>
+                          <td>~118 h</td>
+                          <td>~71 h</td>
+                          <td>~44 h</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">TBC Anniversary</th>
+                          <td>1-70</td>
+                          <td>10,141,700</td>
+                          <td>~90 h</td>
+                          <td>~54 h</td>
+                          <td>~34 h</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">MoP Classic</th>
+                          <td>1-90</td>
+                          <td>95,883,400</td>
+                          <td>~54 h</td>
+                          <td>~32 h</td>
+                          <td>~20 h</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p>
+                    <strong>Casual</strong> is a first time through with no guide addon.
+                    <strong>Average</strong> is a decent route with some downtime.
+                    <strong>Optimized</strong> is a guide addon and a tight route with
+                    little time spent idle. Rested XP, heirlooms and event buffs come off
+                    the top of these numbers - see <a href="#xp-bonuses">XP bonuses</a>.
+                  </p>
+                </section>
+
+                <section id="wow-forever" class="content-section">
+                  <h2>WoW Forever leveling (1-60)</h2>
+                  <p>
+                    WoW Forever launches on
+                    <time datetime="2026-11-04">4 November 2026</time>, with beta open
+                    since <time datetime="2026-09-17">17 September 2026</time>. Blizzard
+                    confirmed the 1-60 XP curve is unchanged from Classic, so reaching 60
+                    is still <strong>4,084,700 XP</strong>. What changed is where that XP
+                    comes from: dungeon mob XP is reduced and dungeon quest XP is raised,
+                    which is meant to stop dungeon spam beating questing the way it does
+                    on Classic Era realms.
+                  </p>
+                  <p>
+                    Forever also adds new leveling ground. Zephras Isle covers 1-12 for
+                    the Skyborne, The Riverglades adds 150+ quests in the awkward 35-45
+                    bracket, Desolace and the Wetlands get expanded questing, and
+                    Krol'dok Stronghold is a 40-45 outdoor dungeon. That extra content
+                    matters most in the 30s and 40s, where vanilla routes traditionally
+                    run thin.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>WoW Forever 1-60: hours to cap by play style</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Play style</th>
+                          <th scope="col">Casual</th>
+                          <th scope="col">Average</th>
+                          <th scope="col">Optimized</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Questing</th><td>~103 h</td><td>~62 h</td><td>~39 h</td></tr>
+                        <tr><th scope="row">Dungeon grinding</th><td>~170 h</td><td>~102 h</td><td>~64 h</td></tr>
+                        <tr><th scope="row">Mixed</th><td>~99 h</td><td>~59 h</td><td>~37 h</td></tr>
+                        <tr><th scope="row">PvP</th><td>~294 h</td><td>~176 h</td><td>~110 h</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="caveat">
+                    Forever rates are pre-launch estimates. The XP requirements are firm
+                    because the curve is unchanged, but the XP/hour bands - the dungeon
+                    ones especially - will be revised once players report live numbers
+                    after launch.
+                  </p>
+                </section>
+
+                <section id="classic-era" class="content-section">
+                  <h2>Classic Era and Hardcore leveling (1-60)</h2>
+                  <p>
+                    Classic Era and Hardcore realms run the original patch 1.12 curve:
+                    <strong>4,084,700 XP</strong> from 1 to 60, no heirlooms, no XP
+                    buffs, no shortcuts. It is the slowest 1-60 of any live version, and
+                    the back half is where the time goes. Levels 50-60 alone are
+                    1,778,600 XP - about 44% of the entire run - while 1-10 is under 1%.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>Classic Era and WoW Forever: XP needed per 10 levels</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Levels</th>
+                          <th scope="col">XP required</th>
+                          <th scope="col">Share of 1-60</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">1 - 10</th><td>27,600</td><td>0.7%</td></tr>
+                        <tr><th scope="row">10 - 20</th><td>139,600</td><td>3.4%</td></tr>
+                        <tr><th scope="row">20 - 30</th><td>331,800</td><td>8.1%</td></tr>
+                        <tr><th scope="row">30 - 40</th><td>655,400</td><td>16.0%</td></tr>
+                        <tr><th scope="row">40 - 50</th><td>1,151,700</td><td>28.2%</td></tr>
+                        <tr><th scope="row">50 - 60</th><td>1,778,600</td><td>43.5%</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>Classic Era 1-60: hours to cap by play style</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Play style</th>
+                          <th scope="col">Casual</th>
+                          <th scope="col">Average</th>
+                          <th scope="col">Optimized</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Questing</th><td>~118 h</td><td>~71 h</td><td>~44 h</td></tr>
+                        <tr><th scope="row">Dungeon grinding</th><td>~135 h</td><td>~81 h</td><td>~51 h</td></tr>
+                        <tr><th scope="row">Mixed</th><td>~114 h</td><td>~69 h</td><td>~43 h</td></tr>
+                        <tr><th scope="row">PvP</th><td>~346 h</td><td>~207 h</td><td>~130 h</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p>
+                    Hardcore realms use the same XP table, so the XP figures apply
+                    directly - but treat the time estimates as a floor. Playing carefully
+                    enough to survive costs hours that none of these paces account for.
+                  </p>
+                </section>
+
+                <section id="tbc-anniversary" class="content-section">
+                  <h2>TBC Anniversary leveling (1-70)</h2>
+                  <p>
+                    TBC Anniversary opened the Dark Portal on
+                    <time datetime="2026-02-05">5 February 2026</time> and runs the
+                    post-patch 2.3 curve, which cut levels 11-59 by up to about 18%. That
+                    makes 1-60 cheaper here - 3,379,400 XP - than on Classic Era, but the
+                    total to 70 is <strong>10,141,700 XP</strong> because Outland is
+                    expensive: levels 60-70 are 6,762,300 XP, roughly 67% of the whole run.
+                  </p>
+                  <p>
+                    Outland is still the fast half. Quest XP per hour from Hellfire
+                    Peninsula onward is several times what Azeroth pays, so the last ten
+                    levels take far less real time than their XP cost suggests. The usual
+                    plan is to push to 58, step through the Dark Portal, and never look
+                    back.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>TBC Anniversary: XP needed per bracket</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Levels</th>
+                          <th scope="col">XP required</th>
+                          <th scope="col">Share of 1-70</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">1 - 10</th><td>27,600</td><td>0.3%</td></tr>
+                        <tr><th scope="row">10 - 20</th><td>131,500</td><td>1.3%</td></tr>
+                        <tr><th scope="row">20 - 30</th><td>281,700</td><td>2.8%</td></tr>
+                        <tr><th scope="row">30 - 40</th><td>536,900</td><td>5.3%</td></tr>
+                        <tr><th scope="row">40 - 50</th><td>943,800</td><td>9.3%</td></tr>
+                        <tr><th scope="row">50 - 58</th><td>1,120,100</td><td>11.0%</td></tr>
+                        <tr><th scope="row">58 - 60</th><td>337,800</td><td>3.3%</td></tr>
+                        <tr><th scope="row">60 - 70 (Outland)</th><td>6,762,300</td><td>66.7%</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>TBC Anniversary 1-70: hours to cap by play style</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Play style</th>
+                          <th scope="col">Casual</th>
+                          <th scope="col">Average</th>
+                          <th scope="col">Optimized</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Questing</th><td>~90 h</td><td>~54 h</td><td>~34 h</td></tr>
+                        <tr><th scope="row">Dungeon grinding</th><td>~93 h</td><td>~56 h</td><td>~35 h</td></tr>
+                        <tr><th scope="row">Mixed</th><td>~86 h</td><td>~51 h</td><td>~32 h</td></tr>
+                        <tr><th scope="row">PvP</th><td>~217 h</td><td>~130 h</td><td>~81 h</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section id="mop-classic" class="content-section">
+                  <h2>MoP Classic leveling (1-90)</h2>
+                  <p>
+                    MoP Classic is on patch 5.5.3, Siege of Orgrimmar. The Escalation
+                    patch on <time datetime="2026-03-31">31 March 2026</time> applied the
+                    5.3 XP reduction, so levels 85-90 now need
+                    <strong>64,990,000 XP</strong> instead of 97,500,000 - a third off the
+                    most expensive stretch in the game. The full 1-90 run is 95,883,400
+                    XP, and Pandaria is still 68% of it.
+                  </p>
+                  <p>
+                    MoP is also the only live version with real XP stacking: heirloom
+                    chest and shoulders for +20%, the guild perk Fast Track for +10%, and
+                    rested on top. That is why a prepared player with heirlooms lands near
+                    the commonly reported 25 hours rather than the 32 the base questing
+                    numbers show, and why 85-90 on its own comes out around 8-9 hours.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>MoP Classic: XP needed per bracket</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Levels</th>
+                          <th scope="col">XP required</th>
+                          <th scope="col">Share of 1-90</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">1 - 10</th><td>27,600</td><td>0.03%</td></tr>
+                        <tr><th scope="row">10 - 20</th><td>105,080</td><td>0.1%</td></tr>
+                        <tr><th scope="row">20 - 30</th><td>225,360</td><td>0.2%</td></tr>
+                        <tr><th scope="row">30 - 40</th><td>429,520</td><td>0.4%</td></tr>
+                        <tr><th scope="row">40 - 50</th><td>943,800</td><td>1.0%</td></tr>
+                        <tr><th scope="row">50 - 60</th><td>1,457,900</td><td>1.5%</td></tr>
+                        <tr><th scope="row">60 - 70 (Outland)</th><td>4,722,000</td><td>4.9%</td></tr>
+                        <tr><th scope="row">70 - 80 (Northrend)</th><td>8,515,000</td><td>8.9%</td></tr>
+                        <tr><th scope="row">80 - 85 (Cataclysm)</th><td>14,467,140</td><td>15.1%</td></tr>
+                        <tr><th scope="row">85 - 90 (Pandaria)</th><td>64,990,000</td><td>67.8%</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>MoP Classic 1-90: hours to cap by play style</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Play style</th>
+                          <th scope="col">Casual</th>
+                          <th scope="col">Average</th>
+                          <th scope="col">Optimized</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Questing</th><td>~54 h</td><td>~32 h</td><td>~20 h</td></tr>
+                        <tr><th scope="row">Dungeon grinding</th><td>~47 h</td><td>~28 h</td><td>~18 h</td></tr>
+                        <tr><th scope="row">Mixed</th><td>~50 h</td><td>~30 h</td><td>~19 h</td></tr>
+                        <tr><th scope="row">PvP</th><td>~97 h</td><td>~58 h</td><td>~36 h</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p>
+                    MoP is the one version where dungeon grinding beats questing outright,
+                    because Dungeon Finder removes the travel and group-forming time that
+                    makes dungeon spam expensive in Classic Era.
+                  </p>
+                </section>
+
+                <section id="xp-bonuses" class="content-section">
+                  <h2>XP bonuses and how much they actually save</h2>
+                  <p>
+                    An XP bonus never changes how much XP a level costs - it changes how
+                    fast you earn it. A +20% bonus cuts roughly 17% off the time, not 20%.
+                    Which bonuses exist depends on the version, so the calculator only
+                    offers the ones that apply to your selection.
+                  </p>
+                  <div class="table-wrap">
+                    <table class="data-table">
+                      <caption>Available XP bonuses by version</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Bonus</th>
+                          <th scope="col">Value</th>
+                          <th scope="col">Where it applies</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Rested XP (typical play)</th>
+                          <td>+15%</td>
+                          <td>All versions</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Always rested (alt or short sessions)</th>
+                          <td>+30%</td>
+                          <td>All versions</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Heirloom chest + shoulders</th>
+                          <td>+20%</td>
+                          <td>MoP Classic only</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Guild perk: Fast Track</th>
+                          <td>+10%</td>
+                          <td>MoP Classic only</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Joyous Journeys</th>
+                          <td>+50%</td>
+                          <td>Not currently active</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p>
+                    Rested doubles the XP you get from killing mobs while the bonus holds.
+                    The two rested options describe the same buff at different intensities,
+                    so they never stack with each other - ticking one unticks the other.
+                    Everything else adds together.
+                  </p>
+                </section>
+
+                <section id="methodology" class="content-section">
+                  <h2>How the numbers work</h2>
+                  <p>
+                    Most leveling calculators divide total XP by a single XP/hour figure.
+                    That is wrong in both directions: a level 12 character and a level 58
+                    character earn wildly different XP per hour, and the XP a level costs
+                    climbs steeply as you go. This calculator walks the table one level at
+                    a time, applying the XP/hour band that fits each level, so a 1-60 run
+                    and a 55-60 run are both estimated honestly.
+                  </p>
+                  <p>
+                    XP requirements come from the Warcraft Wiki
+                    <a href="https://warcraft.wiki.gg/wiki/Experience_to_level" target="_blank" rel="noopener noreferrer">Experience to level</a>
+                    tables and were verified on
+                    <time datetime="2026-09-19">19 September 2026</time>. Each version is
+                    mapped to the curve its patch actually runs: vanilla 1.12 for Classic
+                    Era and WoW Forever, post-2.3 for TBC Anniversary, post-5.3 for MoP
+                    Classic.
+                  </p>
+                  <p>
+                    XP/hour rates are calibrated so a full run at each pace lands inside
+                    the completion times players report for that version. They are
+                    estimates, not measurements - your class, your route, your server's
+                    population and how much time you spend in the auction house all move
+                    the real number. Treat the output as a planning figure, not a promise.
+                  </p>
+                </section>
+
+                <section id="faq" class="content-section">
+                  <h2>Frequently asked questions</h2>
+
+                  <h3>How long does it take to level 1-60 in WoW Classic Era?</h3>
+                  <p>
+                    Levels 1 to 60 need 4,084,700 XP on the original 1.12 curve. Questing
+                    with no XP bonus, this calculator puts a first-time casual run at
+                    roughly 118 hours, an average run at roughly 71 hours, and an
+                    optimized run with a guide addon and a tight route at roughly 44 hours.
+                  </p>
+
+                  <h3>How long will 1-60 take in WoW Forever?</h3>
+                  <p>
+                    The 1-60 XP curve in WoW Forever is unchanged from Classic, so it is
+                    still 4,084,700 XP. Because dungeon mob XP is cut and dungeon quest XP
+                    is raised, questing is meant to be the fastest route: roughly 103 hours
+                    casual, 62 hours average and 39 hours optimized. These are pre-launch
+                    estimates and will be revised once live data lands.
+                  </p>
+
+                  <h3>How much XP do you need to reach level 60?</h3>
+                  <p>
+                    4,084,700 XP in Classic Era and WoW Forever, which both use the vanilla
+                    1.12 curve. In TBC Anniversary the post-2.3 curve cuts levels 11-59, so
+                    1-60 is 3,379,400 XP. Levels 50-60 alone are 1,778,600 XP, about 44
+                    percent of the whole vanilla run.
+                  </p>
+
+                  <h3>How long does 1-70 take in TBC Anniversary?</h3>
+                  <p>
+                    1-70 is 10,141,700 XP, and Outland from 60 to 70 is 6,762,300 of that,
+                    about 67 percent. Questing with no XP bonus lands near 90 hours casual,
+                    54 hours average and 34 hours optimized, because Outland quest XP per
+                    hour is several times higher than Azeroth's.
+                  </p>
+
+                  <h3>How long does 1-90 take in MoP Classic?</h3>
+                  <p>
+                    1-90 is 95,883,400 XP, of which 64,990,000 is levels 85-90 alone.
+                    Questing with no XP bonus is roughly 54 hours casual, 32 hours average
+                    and 20 hours optimized. With heirlooms and rested a prepared player
+                    lands nearer the commonly reported 25 hours, and 85-90 on its own is
+                    about 8-9 hours.
+                  </p>
+
+                  <h3>Does rested XP make leveling faster?</h3>
+                  <p>
+                    Yes, but it changes how fast you earn XP, never how much a level costs.
+                    Rested doubles the XP you get from killing mobs while the bonus lasts,
+                    which works out to roughly +15 percent over a normal play session, or
+                    nearer +30 percent if you only play an alt in short sessions and log
+                    out in an inn. Pick the matching bonus checkbox and the estimate drops
+                    accordingly.
+                  </p>
+
+                  <h3>Is dungeon grinding faster than questing?</h3>
+                  <p>
+                    It depends on the version. In Classic Era dungeon spam is slower
+                    overall than questing, around 81 hours versus 71 at an average pace,
+                    though it is strong in specific brackets. In MoP Classic dungeons are
+                    the fastest single route at roughly 28 hours. In WoW Forever dungeon
+                    mob XP is reduced on purpose, so questing wins clearly.
+                  </p>
+
+                  <h3>Do heirlooms work in Classic Era and WoW Forever?</h3>
+                  <p>
+                    No. Heirlooms do not exist in Classic Era, Hardcore or WoW Forever, so
+                    the only XP bonus available there is rested. MoP Classic has heirloom
+                    chest and shoulders for +20 percent combined, plus the guild perk Fast
+                    Track for another +10 percent.
+                  </p>
+
+                  <h3>Is the Joyous Journeys XP buff still active?</h3>
+                  <p>
+                    Not right now. The +50 percent Joyous Journeys buff ran in MoP Classic
+                    from 21 April 2026 until Siege of Orgrimmar released in early June
+                    2026. The checkbox is still in the calculator so you can model what
+                    happens if Blizzard turns it back on.
+                  </p>
+                </section>
+              </div>
+
+              <div class="rxp-footer-promo">
+                <a
+                  class="rxp-footer-link"
+                  href="https://shop.restedxp.com/ref/officiallysp/"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  title="Get RestedXP premium leveling guides - 10% off"
+                >
+                  <img
+                    src="rxpassets/leaderboard-affiliate-banner-4.png"
+                    alt="RestedXP premium guides - level ultra-fast. Claim 10% off now."
+                    width="728"
+                    height="90"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              </div>
             </div>
-          </div>
 
-          <div class="result-item">
-            <div class="result-label">Levels Remaining:</div>
-            <div class="result-value" id="levelsRemaining">-</div>
+            <aside class="rxp-aside" aria-label="RestedXP promotion">
+              <a
+                class="rxp-aside-link"
+                href="https://shop.restedxp.com/ref/officiallysp/"
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                title="RestedXP premium WoW leveling guides - 10% off"
+              >
+                <img
+                  src="rxpassets/skyscraper-affiliate-banner-2.png"
+                  alt="RestedXP premium guides - level ultra-fast in WoW. Claim 10% off."
+                  width="160"
+                  height="600"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            </aside>
           </div>
-          <p
-            style="
-              text-align: center;
-              color: #4caf50;
-              font-size: 14px;
-              margin-bottom: 20px;
-            "
-          >
-            ✨ XP tables verified 19 September 2026 against
-            <a href="https://warcraft.wiki.gg/wiki/Experience_to_level" target="_blank" rel="noopener noreferrer" style="color: #4caf50;">Warcraft Wiki</a>.
-            XP/hour rates are calibrated to reported completion times per version.
-          </p>
-          <div class="rxp-medium-promo">
-            <a
-              class="rxp-medium-link"
-              href="https://shop.restedxp.com/ref/officiallysp/"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              title="RestedXP premium leveling guides - 10% off"
-            >
-              <img
-                src="rxpassets/affiliate-banner-2.png"
-                alt="RestedXP premium leveling guides - get 10% off. Click to shop."
-                width="300"
-                height="300"
-                loading="lazy"
-              />
-            </a>
-          </div>
-        </div>
+        </section>
+      </main>
 
-        <div class="zone-recommendations">
-          <h3 style="color: #ffd700; margin-bottom: 20px">Zones</h3>
-          <div class="zone-list" id="zoneList">
-            <!-- Zone recommendations will be populated here -->
-          </div>
-        </div>
-
-        <div class="rxp-footer-promo">
-          <a
-            class="rxp-footer-link"
-            href="https://shop.restedxp.com/ref/officiallysp/"
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            title="Get RestedXP premium leveling guides - 10% off"
-          >
-          </a>
-        </div>
-      </div>
-        </div>
-
-        <aside class="rxp-aside" aria-label="RestedXP promotion">
-          <a
-            class="rxp-aside-link"
-            href="https://shop.restedxp.com/ref/officiallysp/"
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            title="RestedXP premium WoW leveling guides - 10% off"
-          >
-            <img
-              src="rxpassets/skyscraper-affiliate-banner-2.png"
-              alt="RestedXP premium guides - level ultra-fast in WoW. Claim 10% off."
-              width="160"
-              height="600"
-              loading="lazy"
-            />
-          </a>
-        </aside>
-      </div>
+      <footer class="site-footer">
+        <p>
+          <strong>WoW Leveling Calculator</strong> - a free tool by
+          <a href="https://officiallysp.net" target="_blank" rel="noopener noreferrer">OfficiallySp</a>.
+          XP data from
+          <a href="https://warcraft.wiki.gg/wiki/Experience_to_level" target="_blank" rel="noopener noreferrer">Warcraft Wiki</a>,
+          verified <time datetime="2026-09-19">19 September 2026</time>.
+        </p>
+        <p class="footer-fineprint">
+          Links to RestedXP are affiliate links and support this site at no extra cost
+          to you. Not affiliated with or endorsed by Blizzard Entertainment. World of
+          Warcraft is a trademark of Blizzard Entertainment, Inc.
+        </p>
+      </footer>
     </div>
-    <script src="script.js"></script>
   </body>
 </html>
